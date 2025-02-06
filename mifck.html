@@ -4,16 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mindf*ck</title>
-
+  
   <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-
+  
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- DaisyUI -->
-  <script src="https://cdn.jsdelivr.net/npm/daisyui@2.0.0-beta.1/dist/full.js"></script>
-
+  
   <!-- FontAwesome -->
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
@@ -23,11 +20,10 @@
     }
 
     .mindfuck-container {
-      max-width: 90%; /* Responsivní šířka */
-      width: 400px;  /* Maximální šířka pro větší obrazovky */
+      max-width: 90%;
+      width: 400px;
     }
 
-    /* Animace pro načítání */
     .loading-spinner {
       border: 4px solid #f3f3f3;
       border-top: 4px solid #7c3aed;
@@ -37,13 +33,11 @@
       animation: spin 1s linear infinite;
     }
 
-    /* Rotace pro načítací animaci */
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
 
-    /* Fade-in animace pro chybu */
     .fade-in {
       animation: fadeIn 1s ease-in-out;
     }
@@ -56,75 +50,116 @@
         opacity: 1;
       }
     }
+
+    /* Odpočet animace */
+    .countdown {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #7c3aed;
+    }
+
+    .countdown-text {
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .countdown-text.visible {
+      opacity: 1;
+    }
+
   </style>
 </head>
 <body class="bg-gradient-to-r from-purple-500 to-purple-900 min-h-screen flex flex-col items-center justify-center">
 
-  <!-- Header -->
   <header class="text-center text-white text-3xl font-bold py-4 w-full">
     Mindf*ck <i class="fas fa-brain"></i>
   </header>
 
-  <!-- Mindf*ck Content -->
   <div id="mindfuck-content" class="mindfuck-container bg-white text-purple-900 p-6 rounded-xl shadow-lg flex justify-center items-center h-64">
     <div id="loading-spinner" class="loading-spinner"></div>
     <p id="mindfuck-text" class="text-center text-lg font-semibold text-gray-700 hidden">Načítám...</p>
   </div>
 
-  <!-- Error Display -->
-  <div id="error-message" class="mindfuck-container bg-red-500 text-white p-6 mt-4 rounded-xl hidden fade-in">
-    <p id="error-text" class="text-center text-lg font-semibold"></p>
-    <div class="flex justify-center items-center mt-4">
-      <button id="copy-btn" class="btn btn-primary text-white mr-2">
-        <i class="fas fa-copy"></i> Copy Error
-      </button>
-      <i class="fas fa-exclamation-circle text-2xl ml-2"></i>
-    </div>
+  <div id="countdown-container" class="mt-4 text-center">
+    <p id="countdown-text" class="countdown countdown-text">Nastavení odpočtu...</p>
   </div>
 
-  <!-- Tailwind and JavaScript -->
   <script>
-    // Funkce pro kopírování chybové zprávy
-    document.getElementById('copy-btn').addEventListener('click', function() {
-      const errorText = document.getElementById('error-text').textContent;
-      navigator.clipboard.writeText(errorText).then(() => {
-        alert('Chybová zpráva zkopírována do schránky!');
-      }).catch((err) => {
-        alert('Chyba při kopírování: ' + err);
-      });
-    });
+    // Načteme moudra z JSON souboru
+    async function fetchMindfucks() {
+      try {
+        const response = await fetch('/fun/mindfuck/v1.json');
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error('Chyba při načítání moudra:', error);
+        return [];
+      }
+    }
 
-    // Fetch the mindfuck from the local JSON file
-    fetch('./fun/mindfuck/v1.json')
-      .then(response => {
-        // Check if the response is ok
-        if (!response.ok) {
-          throw new Error(`Chyba při načítání souboru: ${response.status} ${response.statusText}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        // Ukončíme načítání spinneru a ukážeme mindfuck
+    // Načteme poslední reset z localStorage
+    const lastReset = localStorage.getItem('lastReset');
+    const currentTime = Date.now();
+    const resetInterval = 24 * 60 * 60 * 1000; // 24 hodin v milisekundách
+
+    let mindfuckText = '';
+    
+    // Funkce pro zobrazení moudra
+    async function displayMindfuck() {
+      const mindfucks = await fetchMindfucks();
+      if (mindfucks.length === 0) {
+        document.getElementById('mindfuck-text').textContent = "Chyba při načítání moudra!";
         document.getElementById('loading-spinner').classList.add('hidden');
         document.getElementById('mindfuck-text').classList.remove('hidden');
+        return;
+      }
 
-        // Check if the data is an array and has items
-        if (Array.isArray(data) && data.length > 0) {
-          const mindfuckText = data[Math.floor(Math.random() * data.length)];
-          document.getElementById('mindfuck-text').textContent = mindfuckText;
+      // Zvolíme náhodné moudro
+      if (!lastReset || currentTime - lastReset >= resetInterval) {
+        localStorage.setItem('lastReset', currentTime);
+        mindfuckText = mindfucks[Math.floor(Math.random() * mindfucks.length)];
+      } else {
+        mindfuckText = localStorage.getItem('mindfuckText');
+      }
+
+      // Uložení moudra do localStorage
+      localStorage.setItem('mindfuckText', mindfuckText);
+
+      // Načteme text do HTML
+      document.getElementById('mindfuck-text').textContent = mindfuckText;
+      document.getElementById('loading-spinner').classList.add('hidden');
+      document.getElementById('mindfuck-text').classList.remove('hidden');
+    }
+
+    // Funkce pro odpočet (24 hodin)
+    function startCountdown() {
+      const endTime = parseInt(localStorage.getItem('lastReset')) + resetInterval;
+      const countdownElement = document.getElementById('countdown-text');
+      
+      function updateCountdown() {
+        const currentTime = Date.now();
+        const timeRemaining = endTime - currentTime;
+
+        if (timeRemaining <= 0) {
+          countdownElement.textContent = 'Nové moudro brzy!';
+          countdownElement.classList.remove('visible');
         } else {
-          throw new Error('Data nejsou ve správném formátu nebo jsou prázdná.');
+          const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
+          const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+          
+          countdownElement.textContent = `${hours}h ${minutes}m ${seconds}s`;
+          countdownElement.classList.add('visible');
         }
-      })
-      .catch(error => {
-        console.error('Chyba:', error);
+      }
 
-        // Ukážeme chybu s fade-in animací
-        document.getElementById('loading-spinner').classList.add('hidden');
-        document.getElementById('mindfuck-text').classList.add('hidden');
-        document.getElementById('error-text').textContent = `Podrobnosti: ${error.message}`;
-        document.getElementById('error-message').classList.remove('hidden');
-      });
+      setInterval(updateCountdown, 1000);
+      updateCountdown();  // Volání pro okamžité zobrazení
+    }
+
+    // Zobrazíme moudro a spustíme odpočet
+    displayMindfuck();
+    startCountdown();
   </script>
 </body>
 </html>
