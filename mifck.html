@@ -3,180 +3,344 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mindf*ck</title>
-    <script src="https://kit.fontawesome.com/6cb2e22ea7.js" crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"></script>
+    <title>Mindf<sup><i class="fas fa-bomb"></i></sup>ck App</title>
+    <!-- Google Font s podporou diakritiky (Roboto) -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Link na Tailwind CSS a DaisyUI -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daisyui@2.9.1/dist/full.js"></script>
+    <script src="https://kit.fontawesome.com/6cb2e22ea7.js" crossorigin="anonymous"></script> <!-- FontAwesome -->
+
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #6c63ff, #ff7eb9);
-            transition: background 0.5s ease;
-            overflow: hidden;
+            font-family: 'Roboto', sans-serif;
+            overflow: hidden; /* Zamezíme scrollování */
+            margin: 0;
+            padding: 0;
+            height: 100%;
         }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            padding: 20px;
+
+        header {
+            font-size: 6rem;
+            font-weight: 700;
             text-align: center;
-        }
-        .btn {
-            padding: 12px 20px;
-            border-radius: 8px;
-            background-color: #6c63ff;
             color: white;
-            font-size: 18px;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .btn:hover {
-            background-color: #5a52e2;
-        }
-        .title {
-            font-size: 36px;
-            font-weight: 600;
-            margin-bottom: 20px;
+            margin-top: 2rem;
             display: flex;
             justify-content: center;
             align-items: center;
-        }
-        .title i {
-            font-size: 40px;
-            margin-left: 10px;
-        }
-        .mindf*ck-box {
-            margin: 20px 0;
-            font-size: 24px;
-            color: #333;
-            min-height: 100px;
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow-wrap: break-word;
-        }
-        .favorites {
-            margin-top: 10px;
-            color: #ff7eb9;
-            cursor: pointer;
-        }
-        .progress-bar {
+            position: absolute;
+            top: 0;
             width: 100%;
-            background-color: #ddd;
-            border-radius: 8px;
-            height: 10px;
-            margin-top: 10px;
+            z-index: 10;
         }
-        .progress-bar span {
-            display: block;
-            height: 100%;
-            background-color: #6c63ff;
-            width: 0;
-            border-radius: 8px;
+
+        header i {
+            font-size: 3.5rem;
+            margin-left: 0.2rem;
         }
-        .dark-mode {
-            margin-top: 20px;
+
+        .countdown {
+            font-size: 4rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .error-message {
+            font-size: 1.2rem;
+            color: red;
+            font-weight: bold;
+        }
+
+        .loading {
+            display: none;
+        }
+
+        .icon {
+            font-size: 2.5rem;
+            margin-right: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                font-size: 4rem;
+            }
+
+            .countdown {
+                font-size: 5rem;
+            }
+
+            #mindfuck-box {
+                width: 90%;
+                padding: 2rem;
+            }
+
+            #mindfuck-text {
+                font-size: 1.5rem;
+            }
+
+            .icon {
+                font-size: 2rem;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .countdown {
+                font-size: 5rem;
+            }
+
+            #mindfuck-text {
+                font-size: 2rem;
+            }
+        }
+
+        .box {
+            position: relative;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 3rem;
+            border-radius: 1rem;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            color: white;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            max-height: 70vh;
+            overflow: hidden; /* Zamezíme přetékání textu mimo box */
+        }
+
+        .box:hover {
+            transform: scale(1.05);
+        }
+
+        .icon-box {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            font-size: 1.5rem;
+            color: #fbbf24;
+        }
+
+        .button {
+            background-color: #6366f1;
+            padding: 0.8rem 2rem;
+            color: white;
+            border-radius: 0.5rem;
             cursor: pointer;
-            font-size: 18px;
+            font-size: 1.25rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 2rem;
+            transition: background-color 0.3s ease;
         }
+
+        .button:hover {
+            background-color: #4f46e5;
+        }
+
+        .button i {
+            margin-left: 0.5rem;
+        }
+
+        .typing-animation {
+            display: inline-block;
+            width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 0.1em solid;
+            animation: typing 2s steps(40) 1s 1 normal both;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
+        .rotate {
+            animation: rotate 1s ease;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Dynamický gradient */
+        .bg-gradient {
+            background: linear-gradient(to bottom, #4c1d95, #9d4edd);
+            animation: gradient 6s ease-in-out infinite;
+        }
+
+        @keyframes gradient {
+            0% {
+                background: linear-gradient(to bottom, #4c1d95, #9d4edd);
+            }
+            50% {
+                background: linear-gradient(to bottom, #9d4edd, #4c1d95);
+            }
+            100% {
+                background: linear-gradient(to bottom, #4c1d95, #9d4edd);
+            }
+        }
+
+        /* Oblíbené položky */
+        .favorites {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 1rem;
+            border-radius: 1rem;
+            color: white;
+            margin-top: 2rem;
+            width: 90%;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .favorite-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            background-color: #333;
+            border-radius: 0.5rem;
+        }
+
+        .favorite-item i {
+            cursor: pointer;
+        }
+
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="title">
-            Mindf*ck
-            <i class="fas fa-bomb"></i>
+<body class="bg-gradient-to-r from-purple-500 to-indigo-600 min-h-screen flex justify-center items-center text-white flex-col">
+
+    <!-- Title s explozivní ikonou -->
+    <header class="mb-6 flex justify-center items-center">
+        <span>Mindf<sup><i class="fas fa-bomb"></i></sup>ck</span>
+    </header>
+
+    <!-- Box s mindfuck textem a ikonkou na levém rohu -->
+    <div id="mindfuck-box" class="box w-4/5 md:w-1/2 lg:w-1/3">
+        <!-- Ikona v levém horním rohu boxu -->
+        <i class="fas fa-lightbulb icon-box"></i> <!-- Lightbulb Icon -->
+
+        <!-- Text -->
+        <p id="mindfuck-text" class="text-xl text-center">Načítání moudra...</p>
+
+        <div class="loading text-center mt-4">
+            <span class="loader">Načítání...</span>
         </div>
-        <div class="progress-bar">
-            <span id="progress"></span>
-        </div>
-        <div id="mindfuck-box" class="mindf*ck-box">
-            Načítám moudro...
-        </div>
-        <button id="generateBtn" class="btn">
-            Generovat nové
-            <i id="btn-icon" class="fas fa-sync-alt animate-spin"></i>
+
+        <div class="error-message text-center hidden mt-4" id="error-message"></div>
+    </div>
+
+    <!-- Button pro generování nového mindfucku -->
+    <div class="flex justify-center w-full mt-4">
+        <button id="generate-btn" class="button">
+            Generovat nový
+            <i class="fas fa-sync-alt"></i> <!-- Sync Icon -->
         </button>
-        <div class="favorites" id="addFavoriteBtn">
-            <i class="fas fa-star"></i> Přidat do oblíbených
-        </div>
-        <div class="dark-mode" id="darkModeToggle">
-            <i class="fas fa-moon"></i> Přepnout tmavý režim
-        </div>
+    </div>
+
+    <!-- Oblíbené položky -->
+    <div class="favorites" id="favorites">
+        <div class="text-center text-lg font-bold mb-2">——— Oblíbené ———</div>
+        <div id="favorite-list"></div>
     </div>
 
     <script>
-        const mindfuckBox = document.getElementById('mindfuck-box');
-        const generateBtn = document.getElementById('generateBtn');
-        const progressBar = document.getElementById('progress');
-        const addFavoriteBtn = document.getElementById('addFavoriteBtn');
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        let mindfucks = [];
-        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        const mindfuckTextElement = document.getElementById('mindfuck-text');
+        const errorMessageElement = document.getElementById('error-message');
+        const generateButton = document.getElementById('generate-btn');
+        const favoritesListElement = document.getElementById('favorite-list');
 
-        // Funkce pro načítání moudra
-        async function fetchMindfucks() {
+        // Funkce pro načtení mindfucks z /fun/mindfuck/v1.json
+        async function loadMindfuck() {
             try {
                 const response = await fetch('/fun/mindfuck/v1.json');
-                mindfucks = await response.json();
-                loadMindfuck();
+                if (!response.ok) {
+                    throw new Error('Nepodařilo se načíst moudra');
+                }
+                const mindfucks = await response.json();
+                const randomIndex = Math.floor(Math.random() * mindfucks.length);
+                mindfuckTextElement.innerHTML = `<span class="typing-animation">${mindfucks[randomIndex]}</span>`;
+                updateFavoritesButton(mindfucks[randomIndex]);
             } catch (error) {
-                console.error('Chyba při načítání moudra', error);
-                mindfuckBox.textContent = 'Došlo k chybě při načítání moudra.';
+                console.error('Chyba při načítání moudra:', error);
+                errorMessageElement.textContent = 'Chyba při načítání moudra. Zkuste to znovu.';
+                errorMessageElement.classList.remove('hidden');
+                mindfuckTextElement.textContent = 'Chyba při načítání...';
             }
         }
 
-        // Funkce pro generování náhodného moudra
-        function loadMindfuck() {
-            const randomMindfuck = mindfucks[Math.floor(Math.random() * mindfucks.length)];
-            mindfuckBox.textContent = randomMindfuck;
-
-            // Pokud je moudro v oblíbených, přidáme ikonu
-            if (favorites.includes(randomMindfuck)) {
-                addFavoriteBtn.innerHTML = '<i class="fas fa-heart"></i> Odebrat z oblíbených';
-            } else {
-                addFavoriteBtn.innerHTML = '<i class="fas fa-star"></i> Přidat do oblíbených';
-            }
-        }
-
-        // Uložení do oblíbených
-        addFavoriteBtn.addEventListener('click', () => {
-            const currentMindfuck = mindfuckBox.textContent;
-            if (favorites.includes(currentMindfuck)) {
-                favorites = favorites.filter(fav => fav !== currentMindfuck);
-                addFavoriteBtn.innerHTML = '<i class="fas fa-star"></i> Přidat do oblíbených';
-            } else {
-                favorites.push(currentMindfuck);
-                addFavoriteBtn.innerHTML = '<i class="fas fa-heart"></i> Odebrat z oblíbených';
-            }
+        // Funkce pro uložení oblíbené položky do localStorage
+        function saveFavorite(mindfuckText) {
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            favorites.push(mindfuckText);
             localStorage.setItem('favorites', JSON.stringify(favorites));
-        });
+            renderFavorites();
+        }
 
-        // Tlačítko pro generování nového moudra
-        generateBtn.addEventListener('click', () => {
-            generateBtn.querySelector('i').classList.add('animate-spin');
+        // Funkce pro zobrazení oblíbených položek
+        function renderFavorites() {
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            favoritesListElement.innerHTML = '';
+            favorites.forEach((favorite, index) => {
+                const favoriteItem = document.createElement('div');
+                favoriteItem.classList.add('favorite-item');
+                favoriteItem.innerHTML = `${favorite} <i class="fas fa-times" onclick="removeFavorite(${index})"></i>`;
+                favoritesListElement.appendChild(favoriteItem);
+            });
+        }
+
+        // Funkce pro odstranění oblíbené položky
+        function removeFavorite(index) {
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            favorites.splice(index, 1);
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            renderFavorites();
+        }
+
+        // Zobrazení a skrytí tlačítka pro přidání do oblíbených
+        function updateFavoritesButton(mindfuckText) {
+            const favoriteButton = document.createElement('button');
+            favoriteButton.textContent = 'Přidat do oblíbených';
+            favoriteButton.classList.add('button', 'mt-4');
+            favoriteButton.addEventListener('click', () => {
+                saveFavorite(mindfuckText);
+            });
+            if (!document.getElementById('favorite-btn-container')) {
+                const container = document.createElement('div');
+                container.id = 'favorite-btn-container';
+                container.appendChild(favoriteButton);
+                generateButton.insertAdjacentElement('afterend', container);
+            }
+        }
+
+        // Generování nového moudra po kliknutí na tlačítko
+        generateButton.addEventListener('click', function () {
+            mindfuckTextElement.innerHTML = `<span class="typing-animation">Načítání nového moudra...</span>`;
             loadMindfuck();
+            generateButton.querySelector('i').classList.add('rotate');
             setTimeout(() => {
-                generateBtn.querySelector('i').classList.remove('animate-spin');
+                generateButton.querySelector('i').classList.remove('rotate');
             }, 1000);
         });
 
-        // Tmavý režim
-        darkModeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark');
-            if (document.body.classList.contains('dark')) {
-                document.body.style.background = 'linear-gradient(135deg, #333, #444)';
-                darkModeToggle.innerHTML = '<i class="fas fa-sun"></i> Přepnout světlý režim';
-            } else {
-                document.body.style.background = 'linear-gradient(135deg, #6c63ff, #ff7eb9)';
-                darkModeToggle.innerHTML = '<i class="fas fa-moon"></i> Přepnout tmavý režim';
-            }
-        });
-
-        // Načítání moudra při načtení stránky
-        window.onload = function() {
-            fetchMindfucks();
+        // Načteme první mindf*ck při načtení stránky
+        window.onload = function () {
+            loadMindfuck();
+            renderFavorites();
         };
     </script>
 </body>
