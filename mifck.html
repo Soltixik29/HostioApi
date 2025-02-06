@@ -90,7 +90,7 @@
         <img src="20250206_025121.png" alt="Header Image" />
     </header>
     <div class="box">
-        <div id="mindf*ck-text">Načítám...</div>
+        <div id="mindfck-text">Načítám...</div>
         <button class="generate-btn" id="generate-btn">
             <i class="fas fa-sync"></i> Generovat
         </button>
@@ -98,14 +98,19 @@
 
     <script>
         // DOM elements
-        const mindfckText = document.getElementById("mindf*ck-text");
+        const mindfckText = document.getElementById("mindfck-text");
         const generateBtn = document.getElementById("generate-btn");
 
         // Fetch random mindfuck from the local JSON file
-        async function fetchMindf*ck() {
+        async function fetchMindfck() {
             try {
-                const response = await fetch('./fun/mindfuck/v1.json');
+                const response = await fetch('./fun/mindfuck/v1.json'); // This fetches the local file
+                console.log('Response:', response); // Check the response
+                if (!response.ok) {
+                    throw new Error('Síťová chyba: soubor nebyl nalezen');
+                }
                 const data = await response.json();
+                console.log('Fetched data:', data); // Log the data to see the structure
                 const randomIndex = Math.floor(Math.random() * data.length);
                 mindfckText.textContent = data[randomIndex];
             } catch (error) {
@@ -115,22 +120,22 @@
         }
 
         // Load a random quote into the box
-        function loadMindf*ck() {
-            fetchMindf*ck();
+        function loadMindfck() {
+            fetchMindfck();
         }
 
         // Handle the click event to generate a new quote
         generateBtn.addEventListener("click", () => {
-            loadMindf*ck();
+            loadMindfck();
             generateBtn.classList.add("active");
             setTimeout(() => {
                 generateBtn.classList.remove("active");
             }, 1000);
         });
 
-        // On page load, get a random mindf*ck
+        // On page load, get a random mindfck
         window.onload = () => {
-            loadMindf*ck(); // Load the initial quote
+            loadMindfck(); // Load the initial quote
         };
 
     </script>
