@@ -94,15 +94,16 @@
 
         /* SHARE BUTTON */
         .share-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
             background: transparent;
             border: none;
             cursor: pointer;
             color: white;
-            font-size: 24px;
+            font-size: 40px;
             z-index: 3;
+            transition: transform 0.3s ease;
         }
 
         .share-btn:hover {
@@ -161,14 +162,15 @@
         <img src="20250206_025121.png" alt="Header Image" />
     </header>
     <div class="box">
-        <button class="share-btn" id="share-btn">
-            <i class="fas fa-share-alt"></i>
-        </button>
         <div id="mindfck-text">Načítám...</div>
         <button class="generate-btn" id="generate-btn">
             <i class="fas fa-sync"></i> Generovat
         </button>
     </div>
+
+    <button class="share-btn" id="share-btn">
+        <i class="fas fa-share-alt"></i> 
+    </button>
 
     <script>
         // DOM elements
