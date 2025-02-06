@@ -26,6 +26,36 @@
       max-width: 90%; /* Responsivní šířka */
       width: 400px;  /* Maximální šířka pro větší obrazovky */
     }
+
+    /* Animace pro načítání */
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #7c3aed;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+
+    /* Rotace pro načítací animaci */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Fade-in animace pro chybu */
+    .fade-in {
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
   </style>
 </head>
 <body class="bg-gradient-to-r from-purple-500 to-purple-900 min-h-screen flex flex-col items-center justify-center">
@@ -37,16 +67,33 @@
 
   <!-- Mindf*ck Content -->
   <div id="mindfuck-content" class="mindfuck-container bg-white text-purple-900 p-6 rounded-xl shadow-lg flex justify-center items-center h-64">
-    <p id="mindfuck-text" class="text-center text-lg font-semibold text-gray-700">Načítám...</p>
+    <div id="loading-spinner" class="loading-spinner"></div>
+    <p id="mindfuck-text" class="text-center text-lg font-semibold text-gray-700 hidden">Načítám...</p>
   </div>
 
   <!-- Error Display -->
-  <div id="error-message" class="mindfuck-container bg-red-500 text-white p-6 mt-4 rounded-xl hidden">
+  <div id="error-message" class="mindfuck-container bg-red-500 text-white p-6 mt-4 rounded-xl hidden fade-in">
     <p id="error-text" class="text-center text-lg font-semibold"></p>
+    <div class="flex justify-center items-center mt-4">
+      <button id="copy-btn" class="btn btn-primary text-white mr-2">
+        <i class="fas fa-copy"></i> Copy Error
+      </button>
+      <i class="fas fa-exclamation-circle text-2xl ml-2"></i>
+    </div>
   </div>
 
   <!-- Tailwind and JavaScript -->
   <script>
+    // Funkce pro kopírování chybové zprávy
+    document.getElementById('copy-btn').addEventListener('click', function() {
+      const errorText = document.getElementById('error-text').textContent;
+      navigator.clipboard.writeText(errorText).then(() => {
+        alert('Chybová zpráva zkopírována do schránky!');
+      }).catch((err) => {
+        alert('Chyba při kopírování: ' + err);
+      });
+    });
+
     // Fetch the mindfuck from the local JSON file
     fetch('./fun/mindfuck/v1.json')
       .then(response => {
@@ -57,12 +104,24 @@
         return response.json();
       })
       .then(data => {
-        const mindfuckText = data.mindfucks[Math.floor(Math.random() * data.mindfucks.length)];
-        document.getElementById('mindfuck-text').textContent = mindfuckText;
+        // Ukončíme načítání spinneru a ukážeme mindfuck
+        document.getElementById('loading-spinner').classList.add('hidden');
+        document.getElementById('mindfuck-text').classList.remove('hidden');
+
+        // Check if the data is an array and has items
+        if (Array.isArray(data) && data.length > 0) {
+          const mindfuckText = data[Math.floor(Math.random() * data.length)];
+          document.getElementById('mindfuck-text').textContent = mindfuckText;
+        } else {
+          throw new Error('Data nejsou ve správném formátu nebo jsou prázdná.');
+        }
       })
       .catch(error => {
         console.error('Chyba:', error);
-        document.getElementById('mindfuck-text').textContent = "Chyba při načítání.";
+
+        // Ukážeme chybu s fade-in animací
+        document.getElementById('loading-spinner').classList.add('hidden');
+        document.getElementById('mindfuck-text').classList.add('hidden');
         document.getElementById('error-text').textContent = `Podrobnosti: ${error.message}`;
         document.getElementById('error-message').classList.remove('hidden');
       });
