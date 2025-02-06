@@ -18,6 +18,7 @@
             align-items: center;
             min-height: 100vh;
             overflow: hidden;
+            flex-direction: column;
         }
         header img {
             position: absolute;
@@ -47,6 +48,7 @@
             min-height: auto;
             height: auto;
             transition: height 0.3s ease;
+            z-index: 2;
         }
 
         /* TEXT STYLES */
@@ -69,10 +71,12 @@
             border-radius: 10px;
             cursor: pointer;
             font-size: 18px;
-            transition: transform 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: transform 0.3s ease;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .generate-btn:hover {
@@ -88,6 +92,23 @@
             transform: rotate(360deg);
         }
 
+        /* SHARE BUTTON */
+        .share-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: white;
+            font-size: 24px;
+            z-index: 3;
+        }
+
+        .share-btn:hover {
+            transform: scale(1.1);
+        }
+
         /* ICON STYLES */
         .generate-btn i {
             font-size: 20px;
@@ -99,6 +120,9 @@
                 width: 80%;
                 padding: 1.5rem;
                 font-size: 1rem;
+                box-shadow: none;
+                backdrop-filter: none;
+                border-radius: 10px;
             }
 
             #mindfck-text {
@@ -114,7 +138,22 @@
             .generate-btn i {
                 font-size: 24px;
             }
+
+            /* Gradient Background for mobile */
+            body {
+                background: linear-gradient(45deg, rgba(255, 0, 150, 0.8), rgba(0, 204, 255, 0.8));
+                background-size: 400% 400%;
+                animation: gradientAnimation 15s ease infinite;
+            }
+
+            /* Animation for gradient background */
+            @keyframes gradientAnimation {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
         }
+
     </style>
 </head>
 <body>
@@ -122,6 +161,9 @@
         <img src="20250206_025121.png" alt="Header Image" />
     </header>
     <div class="box">
+        <button class="share-btn" id="share-btn">
+            <i class="fas fa-share-alt"></i>
+        </button>
         <div id="mindfck-text">Načítám...</div>
         <button class="generate-btn" id="generate-btn">
             <i class="fas fa-sync"></i> Generovat
@@ -132,6 +174,7 @@
         // DOM elements
         const mindfckText = document.getElementById("mindfck-text");
         const generateBtn = document.getElementById("generate-btn");
+        const shareBtn = document.getElementById("share-btn");
 
         // Fetch random mindfuck from the local JSON file
         async function fetchMindfck() {
@@ -160,6 +203,20 @@
             setTimeout(() => {
                 generateBtn.classList.remove("active");
             }, 1000);
+        });
+
+        // Handle the share button click event
+        shareBtn.addEventListener("click", () => {
+            const textToShare = mindfckText.textContent;
+            if (navigator.share) {
+                navigator.share({
+                    title: "Mindf*ck Generator",
+                    text: textToShare,
+                    url: window.location.href
+                }).catch(error => console.error("Error sharing:", error));
+            } else {
+                alert("Sdílení není podporováno na tomto zařízení.");
+            }
         });
 
         // On page load, get a random mindfck
