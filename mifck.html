@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mindf*ck</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- DaisyUI -->
+  <script src="https://cdn.jsdelivr.net/npm/daisyui@2.0.0-beta.1/dist/full.js"></script>
+
+  <!-- FontAwesome -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-r from-purple-500 to-purple-900 min-h-screen flex flex-col items-center justify-center">
+  
+  <!-- Header -->
+  <header class="text-center text-white text-2xl font-bold py-4">
+    Mindf*ck <i class="fas fa-brain"></i>
+  </header>
+
+  <!-- Mindf*ck Content -->
+  <div id="mindfuck-content" class="bg-white text-purple-900 p-6 rounded-xl shadow-lg w-96">
+    <p id="mindfuck-text" class="text-center text-lg font-semibold"></p>
+  </div>
+
+  <!-- Tailwind and JavaScript -->
+  <script>
+    // Fetch a random mindfuck from the API
+    fetch('https://api.hostio.xyz/fun/mindfuck/v1.json')
+      .then(response => response.json())
+      .then(data => {
+        const mindfuckText = data.mindfucks[Math.floor(Math.random() * data.mindfucks.length)];
+        document.getElementById('mindfuck-text').textContent = mindfuckText;
+      })
+      .catch(error => console.error('Error fetching mindfuck:', error));
+  </script>
+</body>
+</html>
