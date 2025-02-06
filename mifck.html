@@ -3,53 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mindf*ck App</title>
-
-    <!-- Google Font s podporou diakritiky -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- FontAwesome -->
-    <script src="https://kit.fontawesome.com/6cb2e22ea7.js" crossorigin="anonymous"></script> 
-
+    <title>Mindf*ck Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/6cb2e22ea7.js" crossorigin="anonymous"></script>
     <style>
-        /* ANIMOVANÉ GRADIENTNÍ POZADÍ */
-        @keyframes gradientAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
+        /* GLOBAL STYLES */
         body {
-            font-family: 'Roboto', sans-serif;
-            overflow: hidden;
             margin: 0;
-            padding: 0;
-            height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            background: #1e1e1e;
+            color: white;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            background: linear-gradient(270deg, #2b1055, #3b0c8c, #450175, #2b1055);
-            background-size: 300% 300%;
-            animation: gradientAnimation 15s ease infinite;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
         }
-
-        /* Header obrázek */
-        .header-img {
-            width: 100%;
-            max-height: 300px;
-            object-fit: cover;
-            user-select: none;
-            pointer-events: none;
+        header img {
             position: absolute;
             top: 0;
             left: 0;
+            width: 100%;
+            height: auto;
+            pointer-events: none;
         }
 
-        /* Glassmorphism efekt na boxu */
+        /* BOX STYLES */
         .box {
             position: relative;
             background: rgba(0, 0, 0, 0.3);
@@ -57,13 +36,10 @@
             border-radius: 15px;
             box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
             padding: 2rem;
-            color: white;
             width: 400px;
+            max-width: 90vw;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            display: block; /* Opraveno: změna na block */
             word-wrap: break-word;
             overflow-wrap: break-word;
             white-space: normal;
@@ -73,136 +49,112 @@
             transition: height 0.3s ease;
         }
 
-        /* Ikona v rohu boxu */
-        .icon-box {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            font-size: 1.5rem;
-            color: #fbbf24;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 8px;
-            border-radius: 50%;
-        }
-
-        /* Generování button - nový modernější styl */
-        .button {
-            background: linear-gradient(45deg, #6a11cb, #2575fc);
-            padding: 0.9rem 2rem;
+        /* GENERATE BUTTON */
+        .generate-btn {
+            margin-top: 1rem;
+            padding: 10px 20px;
+            background: #8e24aa;
             color: white;
-            border-radius: 8px;
-            font-size: 1.3rem;
-            font-weight: bold;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 2rem;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
             border: none;
+            border-radius: 10px;
             cursor: pointer;
+            font-size: 18px;
+            transition: transform 0.3s ease;
         }
 
-        .button:hover {
-            transform: scale(1.05);
-            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.4);
+        .generate-btn:hover {
+            transform: scale(1.1);
         }
 
-        .button i {
-            margin-left: 0.5rem;
-            transition: transform 0.5s ease;
+        .generate-btn i {
+            margin-right: 10px;
+            transition: transform 0.3s ease;
         }
 
-        /* Animace ikonky buttonu */
-        .rotate {
-            animation: rotate 0.8s ease;
+        .generate-btn.active i {
+            transform: rotate(360deg);
         }
 
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        /* FAVORITE BUTTON */
+        .favorite-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #ff4081;
         }
 
-        /* Efekt psaní textu */
-        .typing-animation {
-            display: inline-block;
-            width: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            border-right: 0.1em solid white;
-            animation: typing 1.8s steps(30, end) forwards;
-        }
-
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
+        /* MOBILE RESPONSIVENESS */
+        @media (max-width: 600px) {
+            .box {
+                width: 90%;
+                padding: 1.5rem;
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
 <body>
-
-    <!-- Header obrázek -->
-    <img src="20250206_025121.png" alt="Header Image" class="header-img" draggable="false">
-
-    <!-- Box s mindfuck textem -->
-    <div id="mindfuck-box" class="box">
-        <!-- Ikona v rohu boxu -->
-        <i class="fas fa-lightbulb icon-box"></i>
-
-        <!-- Text -->
-        <p id="mindfuck-text" class="text-lg text-center leading-relaxed">Načítání moudra...</p>
-    </div>
-
-    <!-- Button pro generování -->
-    <div class="flex justify-center w-full">
-        <button id="generate-btn" class="button">
-            Generovat nový
-            <i class="fas fa-sync-alt"></i>
+    <header>
+        <img src="20250206_025121.png" alt="Header Image" />
+    </header>
+    <div class="box">
+        <div id="mindf*ck-text">Načítám...</div>
+        <button class="generate-btn" id="generate-btn">
+            <i class="fas fa-sync"></i> Generovat
         </button>
+        <div class="favorite-btn" id="favorite-btn">
+            <i class="fas fa-heart"></i>
+        </div>
     </div>
 
     <script>
-        const mindfuckTextElement = document.getElementById('mindfuck-text');
-        const generateButton = document.getElementById('generate-btn');
-        const mindfuckBox = document.getElementById('mindfuck-box');
+        // DOM elements
+        const mindfckText = document.getElementById("mindf*ck-text");
+        const generateBtn = document.getElementById("generate-btn");
+        const favoriteBtn = document.getElementById("favorite-btn");
 
-        // Funkce pro načtení mindfucků z JSON
-        async function loadMindfuck() {
-            try {
-                const response = await fetch('/fun/mindfuck/v1.json');
-                if (!response.ok) throw new Error('Nepodařilo se načíst moudra');
+        // Sample Mindf*ck quotes (replace with your JSON source later)
+        const mindfucks = [
+            "Když tě učitel nezkouší, je to nejlepší den. Když tě zkouší, je to osudová rána.",
+            "Když se ptáš učitele na něco, co neumíš, jsi zvědavý. Když se ptáš na něco, co on neumí, jsi drzý.",
+            "Když odevzdáš test pozdě, nepočítá se. Když ho učitel oznámkuje pozdě, je to normální."
+        ];
 
-                const mindfucks = await response.json();
-                const randomIndex = Math.floor(Math.random() * mindfucks.length);
-                
-                // Efekt psaní textu
-                mindfuckTextElement.innerHTML = `<span class="typing-animation">${mindfucks[randomIndex]}</span>`;
-
-                // Počkej na dokončení animace a pak přizpůsob výšku boxu
-                setTimeout(() => {
-                    mindfuckBox.style.height = 'auto';
-                }, 1800);
-            } catch (error) {
-                console.error('Chyba při načítání moudra:', error);
-                mindfuckTextElement.textContent = 'Chyba při načítání...';
-            }
+        // Load a random quote into the box
+        function loadMindf*ck() {
+            const randomIndex = Math.floor(Math.random() * mindfucks.length);
+            mindfckText.textContent = mindfucks[randomIndex];
         }
 
-        // Generování nového mindfucku
-        generateButton.addEventListener('click', function () {
-            mindfuckTextElement.innerHTML = `<span class="typing-animation">Načítání nového moudra...</span>`;
-            loadMindfuck();
-
-            // Rotace ikonky při kliknutí
-            generateButton.querySelector('i').classList.add('rotate');
+        // Handle the click event to generate a new quote
+        generateBtn.addEventListener("click", () => {
+            loadMindf*ck();
+            generateBtn.classList.add("active");
             setTimeout(() => {
-                generateButton.querySelector('i').classList.remove('rotate');
-            }, 800);
+                generateBtn.classList.remove("active");
+            }, 1000);
         });
 
-        // Načteme první mindfuck při načtení stránky
-        window.onload = loadMindfuck;
-    </script>
+        // Handle the favorite button click (saving and displaying favorite quotes)
+        favoriteBtn.addEventListener("click", () => {
+            // Here you can save the current quote in LocalStorage
+            const currentText = mindfckText.textContent;
+            localStorage.setItem("favorite", currentText);
+            alert("Moudro přidáno do oblíbených!");
+        });
 
+        // On page load, get the favorite if it exists
+        window.onload = () => {
+            loadMindf*ck(); // Load the initial quote
+
+            const favorite = localStorage.getItem("favorite");
+            if (favorite) {
+                alert("Oblíbené moudro: " + favorite);
+            }
+        };
+
+    </script>
 </body>
 </html>
