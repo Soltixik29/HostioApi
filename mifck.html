@@ -60,7 +60,7 @@
             z-index: 2;
         }
 
-        /* Typing Animation Styles */
+        /* Typing effect */
         #mindfck-text {
             font-size: 1.3rem;
             line-height: 1.8;
@@ -68,20 +68,26 @@
             text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5);
             font-weight: 500;
             margin-bottom: 1.5rem;
-            white-space: nowrap;
             overflow: hidden;
-            border-right: 3px solid #fff;
+            white-space: nowrap;
+            border-right: 3px solid white;
             width: 0;
-            animation: typing 3s steps(40) forwards, blinkCaret 0.75s step-end infinite;
+            animation: typing 3s steps(30) forwards, blink 0.75s step-end infinite;
         }
 
         @keyframes typing {
-            0% { width: 0; }
-            100% { width: 100%; }
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
         }
 
-        @keyframes blinkCaret {
-            50% { border-color: transparent; }
+        @keyframes blink {
+            50% {
+                border-color: transparent;
+            }
         }
 
         /* Generate Button */
@@ -215,12 +221,19 @@
                 }
                 const data = await response.json();
                 const randomIndex = Math.floor(Math.random() * data.length);
-                mindfckText.textContent = data[randomIndex];
-                // Reset typing animation
-                mindfckText.style.width = '0'; // Reset width for reanimation
-                setTimeout(() => {
-                    mindfckText.style.width = mindfckText.scrollWidth + 'px'; // Trigger animation
-                }, 50);
+                const newText = data[randomIndex];
+                mindfckText.textContent = ""; // Clear previous text
+
+                // Typing animation by simulating the typing of each character
+                let i = 0;
+                const typingInterval = setInterval(() => {
+                    mindfckText.textContent += newText[i];
+                    i++;
+                    if (i === newText.length) {
+                        clearInterval(typingInterval); // Stop the typing animation
+                    }
+                }, 100); // Typing speed
+
             } catch (error) {
                 mindfckText.textContent = "Došlo k chybě při načítání moudra.";
             }
