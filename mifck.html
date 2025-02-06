@@ -47,8 +47,8 @@
             backdrop-filter: blur(10px);
             border-radius: 15px;
             box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
-            padding: 3rem;
-            width: 600px;
+            padding: 3rem; /* Increased padding */
+            width: 600px; /* Increased width */
             max-width: 90vw;
             text-align: center;
             display: block;
@@ -111,10 +111,27 @@
             text-align: center;
             color: white;
             font-size: 1rem;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.6);
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(5px);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #8e24aa;
+            border-radius: 5px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        footer a:hover {
+            transform: scale(1.1);
+            background-color: #6a1b9a;
         }
 
         /* Icon Styles */
@@ -170,7 +187,8 @@
     </div>
 
     <footer>
-        Mindf*ck Generator © 2025
+        <a href="/download" target="_blank">Stáhnout</a>
+        <span>Mindf*ck Generator © 2025</span>
     </footer>
 
     <script>
@@ -193,26 +211,9 @@
             }
         }
 
-        // Function to check if the app is installed and open it or prompt for download
-        function checkAppInstallation() {
-            const appScheme = 'cz.hostio.mindfck://';
-            const downloadLink = '/download';
-            
-            const startTime = new Date().getTime();
-            const iframe = document.createElement('iframe');
-            iframe.style.display = 'none';
-            iframe.src = appScheme;
-            document.body.appendChild(iframe);
-
-            setTimeout(() => {
-                const endTime = new Date().getTime();
-                if (endTime - startTime < 1500) {
-                    // The app is not installed, show download prompt
-                    alert('Aplikace není nainstalována. Chcete ji nainstalovat?');
-                    window.location.href = downloadLink; // Redirect to the download page
-                }
-                document.body.removeChild(iframe);
-            }, 1500);
+        // Load a random quote into the box
+        function loadMindfck() {
+            fetchMindfck();
         }
 
         // Handle the click event to generate a new quote
@@ -224,10 +225,9 @@
             }, 1000);
         });
 
-        // On page load, get a random mindfck and check for app installation
+        // On page load, get a random mindfck
         window.onload = () => {
             loadMindfck(); // Load the initial quote
-            checkAppInstallation(); // Check if the app is installed
         };
     </script>
 </body>
