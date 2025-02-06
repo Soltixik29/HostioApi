@@ -24,6 +24,7 @@
 
         body {
             font-family: 'Roboto', sans-serif;
+            overflow: hidden;
             margin: 0;
             padding: 0;
             height: 100vh;
@@ -57,7 +58,6 @@
             box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
             padding: 2rem;
             color: white;
-            max-width: 90%;
             width: 400px;
             text-align: center;
             display: flex;
@@ -66,6 +66,10 @@
             align-items: center;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            white-space: normal;
+            min-height: auto;
+            height: auto;
+            transition: all 0.3s ease;
         }
 
         /* Ikona v rohu boxu */
@@ -156,6 +160,7 @@
     <script>
         const mindfuckTextElement = document.getElementById('mindfuck-text');
         const generateButton = document.getElementById('generate-btn');
+        const mindfuckBox = document.getElementById('mindfuck-box');
 
         // Funkce pro načtení mindfucků z JSON
         async function loadMindfuck() {
@@ -168,6 +173,11 @@
                 
                 // Efekt psaní textu
                 mindfuckTextElement.innerHTML = `<span class="typing-animation">${mindfucks[randomIndex]}</span>`;
+
+                // Počkej na dokončení animace a pak přizpůsob výšku boxu
+                setTimeout(() => {
+                    mindfuckBox.style.height = 'auto';
+                }, 1800);
             } catch (error) {
                 console.error('Chyba při načítání moudra:', error);
                 mindfuckTextElement.textContent = 'Chyba při načítání...';
