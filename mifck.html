@@ -31,7 +31,7 @@
         /* BOX STYLES */
         .box {
             position: relative;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
@@ -49,10 +49,20 @@
             transition: height 0.3s ease;
         }
 
+        /* TEXT STYLES */
+        #mindfck-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: white;
+            text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5);
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
         /* GENERATE BUTTON */
         .generate-btn {
             margin-top: 1rem;
-            padding: 10px 20px;
+            padding: 12px 30px;
             background: #8e24aa;
             color: white;
             border: none;
@@ -60,6 +70,9 @@
             cursor: pointer;
             font-size: 18px;
             transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .generate-btn:hover {
@@ -75,12 +88,31 @@
             transform: rotate(360deg);
         }
 
+        /* ICON STYLES */
+        .generate-btn i {
+            font-size: 20px;
+        }
+
         /* MOBILE RESPONSIVENESS */
         @media (max-width: 600px) {
             .box {
-                width: 90%;
+                width: 80%;
                 padding: 1.5rem;
                 font-size: 1rem;
+            }
+
+            #mindfck-text {
+                font-size: 1.5rem;
+                line-height: 1.8;
+            }
+
+            .generate-btn {
+                font-size: 16px;
+                padding: 12px 25px;
+            }
+
+            .generate-btn i {
+                font-size: 24px;
             }
         }
     </style>
@@ -105,17 +137,14 @@
         async function fetchMindfck() {
             try {
                 const response = await fetch('./fun/mindfuck/v1.json'); // This fetches the local file
-                console.log('Response:', response); // Check the response
                 if (!response.ok) {
                     throw new Error('Síťová chyba: soubor nebyl nalezen');
                 }
                 const data = await response.json();
-                console.log('Fetched data:', data); // Log the data to see the structure
                 const randomIndex = Math.floor(Math.random() * data.length);
                 mindfckText.textContent = data[randomIndex];
             } catch (error) {
                 mindfckText.textContent = "Došlo k chybě při načítání moudra.";
-                console.error("Chyba při načítání:", error);
             }
         }
 
