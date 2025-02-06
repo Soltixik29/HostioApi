@@ -108,7 +108,8 @@
             justify-content: center;
             text-align: center;
             max-height: 70vh;
-            overflow: hidden; /* Zamezíme přetékání textu mimo box */
+            overflow: hidden;
+            word-wrap: break-word; /* Text won't overflow */
         }
 
         .box:hover {
@@ -119,7 +120,7 @@
             position: absolute;
             top: -15px;
             left: -15px;
-            font-size: 1.5rem;
+            font-size: 2rem;
             color: #fbbf24;
         }
 
@@ -204,6 +205,7 @@
             width: 90%;
             max-height: 200px;
             overflow-y: auto;
+            transition: opacity 0.5s ease-in-out;
         }
 
         .favorite-item {
@@ -218,8 +220,14 @@
 
         .favorite-item i {
             cursor: pointer;
+            color: #f87171;
+            font-size: 1.25rem;
         }
 
+        .favorite-item.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-r from-purple-500 to-indigo-600 min-h-screen flex justify-center items-center text-white flex-col">
@@ -244,6 +252,13 @@
         <div class="error-message text-center hidden mt-4" id="error-message"></div>
     </div>
 
+    <!-- Tlačítko pro přidání do oblíbených vedle boxu -->
+    <div class="flex justify-center w-full mt-4">
+        <button id="favorite-btn" class="button">
+            <i class="fas fa-heart"></i>
+        </button>
+    </div>
+
     <!-- Button pro generování nového mindfucku -->
     <div class="flex justify-center w-full mt-4">
         <button id="generate-btn" class="button">
@@ -262,6 +277,7 @@
         const mindfuckTextElement = document.getElementById('mindfuck-text');
         const errorMessageElement = document.getElementById('error-message');
         const generateButton = document.getElementById('generate-btn');
+        const favoriteButton = document.getElementById('favorite-btn');
         const favoritesListElement = document.getElementById('favorite-list');
 
         // Funkce pro načtení mindfucks z /fun/mindfuck/v1.json
@@ -274,7 +290,7 @@
                 const mindfucks = await response.json();
                 const randomIndex = Math.floor(Math.random() * mindfucks.length);
                 mindfuckTextElement.innerHTML = `<span class="typing-animation">${mindfucks[randomIndex]}</span>`;
-                updateFavoritesButton(mindfucks[randomIndex]);
+                updateFavoriteButton(mindfucks[randomIndex]);
             } catch (error) {
                 console.error('Chyba při načítání moudra:', error);
                 errorMessageElement.textContent = 'Chyba při načítání moudra. Zkuste to znovu.';
@@ -312,22 +328,13 @@
         }
 
         // Zobrazení a skrytí tlačítka pro přidání do oblíbených
-        function updateFavoritesButton(mindfuckText) {
-            const favoriteButton = document.createElement('button');
-            favoriteButton.textContent = 'Přidat do oblíbených';
-            favoriteButton.classList.add('button', 'mt-4');
+        function updateFavoriteButton(mindfuckText) {
             favoriteButton.addEventListener('click', () => {
                 saveFavorite(mindfuckText);
             });
-            if (!document.getElementById('favorite-btn-container')) {
-                const container = document.createElement('div');
-                container.id = 'favorite-btn-container';
-                container.appendChild(favoriteButton);
-                generateButton.insertAdjacentElement('afterend', container);
-            }
         }
 
-        // Generování nového moudra po kliknutí na tlačítko
+        // Generování nového mindf*ck po kliknutí na tlačítko
         generateButton.addEventListener('click', function () {
             mindfuckTextElement.innerHTML = `<span class="typing-animation">Načítání nového moudra...</span>`;
             loadMindfuck();
