@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mindf<sup><i class="fas fa-bomb"></i></sup>ck App</title>
+    <title>Mindf*ck | By Hostio</title>
     <!-- Google Font s podporou diakritiky (Roboto) -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <!-- Link na Tailwind CSS a DaisyUI -->
@@ -29,6 +29,11 @@
             top: 0;
             width: 100%;
             z-index: 10;
+        }
+
+        header i {
+            font-size: 3.5rem;
+            margin-left: 0.2rem;
         }
 
         .countdown {
@@ -97,17 +102,18 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            text-align: center;
         }
 
         .box:hover {
             transform: scale(1.05);
         }
-        
+
         .icon-box {
             position: absolute;
             top: -15px;
             left: -15px;
-            font-size: 3rem;
+            font-size: 2rem;
             color: #fbbf24;
         }
 
@@ -223,9 +229,9 @@
         generateButton.addEventListener('click', function () {
             mindfuckTextElement.innerHTML = `<span class="typing-animation">Načítání nového moudra...</span>`;
             loadMindfuck();
-            generateButton.classList.add('rotate');
+            generateButton.querySelector('i').classList.add('rotate');
             setTimeout(() => {
-                generateButton.classList.remove('rotate');
+                generateButton.querySelector('i').classList.remove('rotate');
             }, 1000);
         });
 
