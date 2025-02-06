@@ -30,6 +30,18 @@
             flex-direction: column;
         }
 
+        /* Fullscreen Image */
+        header img {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            pointer-events: none;
+        }
+
         /* Fullscreen Glass Box */
         .box {
             position: absolute;
@@ -47,14 +59,13 @@
             z-index: 2;
             box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.5);
             border-radius: 15px;
-            animation: boxAnimation 10s ease infinite;
         }
 
         /* Typing Animation */
         #mindfck-text {
             font-size: 2rem;
             color: white;
-            text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5);
+            text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.8);
             font-weight: 500;
             margin-bottom: 2rem;
             text-align: center;
@@ -165,6 +176,11 @@
             100% { background-position: 0% 50%; }
         }
 
+        /* Glowing text effect */
+        #mindfck-text.glowing {
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.4);
+        }
+
         /* Mobile responsiveness */
         @media (max-width: 600px) {
             .box {
@@ -177,6 +193,7 @@
                 width: 100%;
                 word-wrap: break-word;
                 white-space: normal;
+                line-height: 1.4;
             }
 
             .generate-btn {
@@ -218,6 +235,17 @@
         const generateBtn = document.getElementById("generate-btn");
         const toast = document.getElementById("toast");
 
+        // Function to trigger typing animation
+        function startTypingAnimation() {
+            mindfckText.classList.remove('glowing');
+            mindfckText.classList.remove('typing');
+            void mindfckText.offsetWidth;  // Trigger reflow to restart animation
+            mindfckText.classList.add('typing');
+            setTimeout(() => {
+                mindfckText.classList.add('glowing');
+            }, 3000);  // After typing animation, add glowing effect
+        }
+
         // Fetch random mindfuck from the local JSON file
         async function fetchMindfck() {
             try {
@@ -228,6 +256,7 @@
                 const data = await response.json();
                 const randomIndex = Math.floor(Math.random() * data.length);
                 mindfckText.textContent = data[randomIndex];
+                startTypingAnimation();
             } catch (error) {
                 mindfckText.textContent = "Došlo k chybě při načítání moudra.";
             }
