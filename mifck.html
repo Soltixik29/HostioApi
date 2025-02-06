@@ -28,6 +28,8 @@
             min-height: 100vh;
             overflow: hidden;
             flex-direction: column;
+            backdrop-filter: blur(10px); /* Glass effect for the entire body */
+            z-index: -1; /* Make sure the backdrop doesn't cover your content */
         }
 
         /* Header Image */
@@ -43,8 +45,7 @@
         /* Box Styles */
         .box {
             position: relative;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.4); /* Optional, just to give the box a semi-transparent background */
             border-radius: 15px;
             box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
             padding: 2rem;
