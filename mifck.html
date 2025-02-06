@@ -40,18 +40,31 @@
     <p id="mindfuck-text" class="text-center text-lg font-semibold text-gray-700">Načítám...</p>
   </div>
 
+  <!-- Error Display -->
+  <div id="error-message" class="mindfuck-container bg-red-500 text-white p-6 mt-4 rounded-xl hidden">
+    <p id="error-text" class="text-center text-lg font-semibold"></p>
+  </div>
+
   <!-- Tailwind and JavaScript -->
   <script>
-    // Fetch the mindfuck from the API
-    fetch('https://api.hostio.xyz/fun/mindfuck/v1.json')
-      .then(response => response.json())
+    // Fetch the mindfuck from the local JSON file
+    fetch('./fun/mindfuck/v1.json')
+      .then(response => {
+        // Check if the response is ok
+        if (!response.ok) {
+          throw new Error(`Chyba při načítání souboru: ${response.status} ${response.statusText}`);
+        }
+        return response.json();
+      })
       .then(data => {
         const mindfuckText = data.mindfucks[Math.floor(Math.random() * data.mindfucks.length)];
         document.getElementById('mindfuck-text').textContent = mindfuckText;
       })
       .catch(error => {
-        console.error('Error fetching mindfuck:', error);
+        console.error('Chyba:', error);
         document.getElementById('mindfuck-text').textContent = "Chyba při načítání.";
+        document.getElementById('error-text').textContent = `Podrobnosti: ${error.message}`;
+        document.getElementById('error-message').classList.remove('hidden');
       });
   </script>
 </body>
