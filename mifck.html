@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta property="og:title" content="Mindf*ck Generator">
     <meta property="og:description" content="Generátor náhodných moudrů, které vám roztočí hlavu.">
-    <meta property="og:image" content="https://example.com/path/to/your-image.jpg">
+    <meta property="og:image" content="20250206_025121.png">
     <meta property="og:url" content="https://example.com">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Mindf*ck Generator">
     <meta name="twitter:description" content="Generátor náhodných moudrů, které vám roztočí hlavu.">
-    <meta name="twitter:image" content="https://example.com/path/to/your-image.jpg">
+    <meta name="twitter:image" content="20250206_025121.png">
     <title>Mindf*ck Generator</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/6cb2e22ea7.js" crossorigin="anonymous"></script>
@@ -64,8 +64,8 @@
 
         /* Text Styles */
         #mindfck-text {
-            font-size: 1.2rem;
-            line-height: 1.6;
+            font-size: 1.3rem;
+            line-height: 1.8;
             color: white;
             text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5);
             font-weight: 500;
@@ -191,7 +191,7 @@
     </div>
 
     <footer>
-        Mindf*ck Generator © 2025 - Made by Denis Bušek
+        Mindf*ck Generator © 2025
     </footer>
 
     <script>
@@ -231,7 +231,7 @@
 
         // Handle the share button click event
         shareBtn.addEventListener("click", () => {
-            const textToShare = mindfckText.textContent;
+            const textToShare = `Mindfuck: ${mindfckText.textContent} - Najdi si další na ${window.location.href}`;
             if (navigator.share) {
                 navigator.share({
                     title: "Mindf*ck Generator",
