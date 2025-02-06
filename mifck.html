@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mindf*ck App</title>
-    
+
     <!-- Google Font s podporou diakritiky -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     
@@ -13,7 +13,7 @@
     
     <!-- FontAwesome -->
     <script src="https://kit.fontawesome.com/6cb2e22ea7.js" crossorigin="anonymous"></script> 
-    
+
     <style>
         /* ANIMOVANÉ GRADIENTNÍ POZADÍ */
         @keyframes gradientAnimation {
@@ -67,18 +67,22 @@
             word-wrap: break-word;
             overflow-wrap: break-word;
             white-space: normal;
+            overflow: hidden;
             min-height: auto;
             height: auto;
-            transition: all 0.3s ease;
+            transition: height 0.3s ease;
         }
 
         /* Ikona v rohu boxu */
         .icon-box {
             position: absolute;
-            top: -8px;
-            right: -8px;
-            font-size: 1.8rem;
+            top: -10px;
+            right: -10px;
+            font-size: 1.5rem;
             color: #fbbf24;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px;
+            border-radius: 50%;
         }
 
         /* Generování button - nový modernější styl */
