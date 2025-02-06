@@ -1,165 +1,130 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mindf*ck</title>
-  
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- FontAwesome -->
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mindf*ck App</title>
+    <!-- Link na Google Font Orbitron pro Power Up styl -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Link na Tailwind CSS a DaisyUI -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daisyui@2.9.1/dist/full.js"></script>
 
-  <style>
-    body {
-      font-family: 'Roboto', sans-serif;
-    }
-
-    .mindfuck-container {
-      max-width: 90%;
-      width: 400px;
-    }
-
-    .loading-spinner {
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid #7c3aed;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .fade-in {
-      animation: fadeIn 1s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      0% {
-        opacity: 0;
-      }
-      100% {
-        opacity: 1;
-      }
-    }
-
-    /* Odpočet animace */
-    .countdown {
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #7c3aed;
-    }
-
-    .countdown-text {
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-    }
-
-    .countdown-text.visible {
-      opacity: 1;
-    }
-
-  </style>
-</head>
-<body class="bg-gradient-to-r from-purple-500 to-purple-900 min-h-screen flex flex-col items-center justify-center">
-
-  <header class="text-center text-white text-3xl font-bold py-4 w-full">
-    Mindf*ck <i class="fas fa-brain"></i>
-  </header>
-
-  <div id="mindfuck-content" class="mindfuck-container bg-white text-purple-900 p-6 rounded-xl shadow-lg flex justify-center items-center h-64">
-    <div id="loading-spinner" class="loading-spinner"></div>
-    <p id="mindfuck-text" class="text-center text-lg font-semibold text-gray-700 hidden">Načítám...</p>
-  </div>
-
-  <div id="countdown-container" class="mt-4 text-center">
-    <p id="countdown-text" class="countdown countdown-text">Nastavení odpočtu...</p>
-  </div>
-
-  <script>
-    // Načteme moudra z JSON souboru
-    async function fetchMindfucks() {
-      try {
-        const response = await fetch('https://api.hostio.xyz/fun/mindfuck/v1.json');
-        const data = await response.json();
-        return data;
-      } catch (error) {
-        console.error('Chyba při načítání moudra:', error);
-        return [];
-      }
-    }
-
-    // Načteme poslední reset z localStorage
-    const lastReset = localStorage.getItem('lastReset');
-    const currentTime = Date.now();
-    const resetInterval = 2400; // 24 hodin v milisekundách
-
-    let mindfuckText = '';
-    
-    // Funkce pro zobrazení moudra
-    async function displayMindfuck() {
-      const mindfucks = await fetchMindfucks();
-      if (mindfucks.length === 0) {
-        document.getElementById('mindfuck-text').textContent = "Chyba při načítání moudra!";
-        document.getElementById('loading-spinner').classList.add('hidden');
-        document.getElementById('mindfuck-text').classList.remove('hidden');
-        return;
-      }
-
-      // Zvolíme náhodné moudro
-      if (!lastReset || currentTime - lastReset >= resetInterval) {
-        localStorage.setItem('lastReset', currentTime);
-        mindfuckText = mindfucks[Math.floor(Math.random() * mindfucks.length)];
-      } else {
-        mindfuckText = localStorage.getItem('mindfuckText');
-      }
-
-      // Uložení moudra do localStorage
-      localStorage.setItem('mindfuckText', mindfuckText);
-
-      // Načteme text do HTML
-      document.getElementById('mindfuck-text').textContent = mindfuckText;
-      document.getElementById('loading-spinner').classList.add('hidden');
-      document.getElementById('mindfuck-text').classList.remove('hidden');
-    }
-
-    // Funkce pro odpočet (24 hodin)
-    function startCountdown() {
-      const endTime = parseInt(localStorage.getItem('lastReset')) + resetInterval;
-      const countdownElement = document.getElementById('countdown-text');
-      
-      function updateCountdown() {
-        const currentTime = Date.now();
-        const timeRemaining = endTime - currentTime;
-
-        if (timeRemaining <= 0) {
-          countdownElement.textContent = 'Nové moudro brzy!';
-          countdownElement.classList.remove('visible');
-        } else {
-          const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
-          const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-          const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-          
-          countdownElement.textContent = `${hours}h ${minutes}m ${seconds}s`;
-          countdownElement.classList.add('visible');
+    <style>
+        body {
+            font-family: 'Orbitron', sans-serif;
         }
-      }
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
 
-      setInterval(updateCountdown, 1000);
-      updateCountdown();  // Volání pro okamžité zobrazení
-    }
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
 
-    // Zobrazíme moudro a spustíme odpočet
-    displayMindfuck();
-    startCountdown();
-  </script>
+        .countdown {
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .error-message {
+            font-size: 1rem;
+            color: red;
+            font-weight: bold;
+        }
+
+        .loading {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-r from-purple-500 to-indigo-600 min-h-screen flex justify-center items-center text-white flex-col">
+
+    <header class="mb-4 text-3xl font-extrabold">
+        <span>Mindf*ck</span>
+    </header>
+
+    <div id="countdown-timer" class="countdown mb-6 text-center">
+        <!-- Countdown bude zde -->
+    </div>
+
+    <div id="mindfuck-box" class="bg-white p-6 rounded-xl shadow-md text-black w-4/5 md:w-1/2 lg:w-1/3">
+        <p id="mindfuck-text" class="text-xl text-center">Načítání moudra...</p>
+        <div class="loading text-center mt-4">
+            <span class="loader">Načítání...</span>
+        </div>
+        <div class="error-message text-center hidden mt-4" id="error-message"></div>
+    </div>
+
+    <script>
+        const mindfuckTextElement = document.getElementById('mindfuck-text');
+        const errorMessageElement = document.getElementById('error-message');
+        const loadingElement = document.querySelector('.loading');
+        const countdownElement = document.getElementById('countdown-timer');
+        const API_PATH = './fun/mindfuck/v1.json'; // cesta k souboru JSON
+        const RESET_INTERVAL = 24 * 60 * 60 * 1000; // 24 hodin
+
+        let countdown = RESET_INTERVAL; // odpočet do 24h
+        let intervalID;
+
+        // Funkce pro načítání Mindf*cku
+        async function fetchMindfucks() {
+            try {
+                const response = await fetch(API_PATH);
+                if (!response.ok) {
+                    throw new Error('Nepodařilo se načíst moudra');
+                }
+                const data = await response.json();
+
+                // Debug: Zkontroluj, co jsme načetli
+                console.log("Data načtena:", data);
+
+                if (data && Array.isArray(data) && data.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * data.length);
+                    mindfuckTextElement.textContent = data[randomIndex];
+                    mindfuckTextElement.classList.add('fade-in');
+                } else {
+                    throw new Error('Data jsou prázdná');
+                }
+            } catch (error) {
+                // Debug: Chyba při načítání dat
+                console.error("Chyba při načítání:", error);
+                errorMessageElement.textContent = `Chyba při načítání: ${error.message}`;
+                errorMessageElement.classList.remove('hidden');
+                loadingElement.classList.add('hidden');
+            }
+        }
+
+        // Funkce pro spuštění a zobrazení odpočtu
+        function startCountdown() {
+            const targetTime = Date.now() + countdown;
+
+            intervalID = setInterval(() => {
+                const remainingTime = targetTime - Date.now();
+                if (remainingTime <= 0) {
+                    clearInterval(intervalID);
+                    startCountdown(); // Restart odpočtu každých 24h
+                }
+                const hours = Math.floor(remainingTime / (1000 * 60 * 60));
+                const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+
+                countdownElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        // Zavolání funkce pro načítání moudra a start odpočtu
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchMindfucks();
+            startCountdown();
+        });
+    </script>
+
 </body>
 </html>
