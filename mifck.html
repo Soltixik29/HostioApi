@@ -30,50 +30,46 @@
             flex-direction: column;
         }
 
-        /* Fullscreen Image */
+        /* Header Image */
         header img {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        /* Fullscreen Glass Box */
-        .box {
             position: absolute;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(15px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            padding: 2rem;
-            z-index: 2;
-            box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.5);
-            border-radius: 15px;
+            width: 100%;
+            height: auto;
+            pointer-events: none;
         }
 
-        /* Typing Animation */
-        #mindfck-text {
-            font-size: 2rem;
-            color: white;
-            text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.8);
-            font-weight: 500;
-            margin-bottom: 2rem;
+        /* Box Styles */
+        .box {
+            position: relative;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+            padding: 2rem;
+            width: 400px;
+            max-width: 90vw;
             text-align: center;
-            white-space: nowrap;
+            display: block;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
             overflow: hidden;
-            border-right: 3px solid rgba(255, 255, 255, 0.75);
-            width: 0;
-            animation: typing 3s steps(30) 1s forwards, blinkCaret 0.75s step-end infinite;
+            min-height: auto;
+            height: auto;
+            transition: height 0.3s ease;
+            z-index: 2;
+        }
+
+        /* Text Styles */
+        #mindfck-text {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: white;
+            text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5);
+            font-weight: 500;
+            margin-bottom: 1.5rem;
         }
 
         /* Generate Button */
@@ -90,6 +86,8 @@
             align-items: center;
             justify-content: center;
             transition: transform 0.3s ease;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .generate-btn:hover {
@@ -103,11 +101,6 @@
 
         .generate-btn.active i {
             transform: rotate(360deg);
-        }
-
-        /* Icon Styles */
-        .generate-btn i {
-            font-size: 20px;
         }
 
         /* Footer Styles */
@@ -124,76 +117,32 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
         }
 
-        /* Toast Styles */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #4caf50;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 10px;
-            display: none;
-            align-items: center;
-            font-size: 16px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-        }
-
-        .toast.show {
-            display: flex;
-            opacity: 1;
-        }
-
-        .toast .toast-icon {
-            margin-right: 10px;
+        /* Icon Styles */
+        .generate-btn i {
             font-size: 20px;
         }
 
-        /* Animations for typing and caret blink */
-        @keyframes typing {
-            from {
-                width: 0;
-            }
-            to {
-                width: 100%;
-            }
-        }
-
-        @keyframes blinkCaret {
-            50% {
-                border-color: transparent;
-            }
-        }
-
-        /* Gradient Animation */
+        /* Animation for gradient background */
         @keyframes gradientAnimation {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* Glowing text effect */
-        #mindfck-text.glowing {
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.4);
-        }
-
-        /* Mobile responsiveness */
+        /* MOBILE RESPONSIVENESS */
         @media (max-width: 600px) {
             .box {
+                width: 80%;
                 padding: 1.5rem;
+                font-size: 1rem;
+                box-shadow: none;
+                backdrop-filter: none;
+                border-radius: 10px;
             }
 
             #mindfck-text {
                 font-size: 1.5rem;
-                text-align: center;
-                width: 100%;
-                word-wrap: break-word;
-                white-space: normal;
-                line-height: 1.4;
+                line-height: 1.8;
             }
 
             .generate-btn {
@@ -205,6 +154,7 @@
                 font-size: 24px;
             }
         }
+
     </style>
 </head>
 <body>
@@ -223,28 +173,10 @@
         Mindf*ck Generator © 2025
     </footer>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="toast">
-        <i class="fas fa-check-circle toast-icon"></i>
-        Moudro zkopírováno!
-    </div>
-
     <script>
         // DOM elements
         const mindfckText = document.getElementById("mindfck-text");
         const generateBtn = document.getElementById("generate-btn");
-        const toast = document.getElementById("toast");
-
-        // Function to trigger typing animation
-        function startTypingAnimation() {
-            mindfckText.classList.remove('glowing');
-            mindfckText.classList.remove('typing');
-            void mindfckText.offsetWidth;  // Trigger reflow to restart animation
-            mindfckText.classList.add('typing');
-            setTimeout(() => {
-                mindfckText.classList.add('glowing');
-            }, 3000);  // After typing animation, add glowing effect
-        }
 
         // Fetch random mindfuck from the local JSON file
         async function fetchMindfck() {
@@ -256,7 +188,6 @@
                 const data = await response.json();
                 const randomIndex = Math.floor(Math.random() * data.length);
                 mindfckText.textContent = data[randomIndex];
-                startTypingAnimation();
             } catch (error) {
                 mindfckText.textContent = "Došlo k chybě při načítání moudra.";
             }
