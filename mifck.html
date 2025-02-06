@@ -28,7 +28,6 @@
             min-height: 100vh;
             overflow: hidden;
             flex-direction: column;
-            padding-bottom: 80px; /* Extra space to prevent content overlap with sticky footer */
         }
 
         /* Header Image */
@@ -104,29 +103,35 @@
 
         /* Footer Styles */
         footer {
-            position: sticky;
+            position: absolute;
             bottom: 0;
+            left: 0;
             width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            color: white;
             font-size: 1rem;
             backdrop-filter: blur(5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        footer img {
+            width: 50px;
+            height: auto;
+            border-radius: 5px;
         }
 
         footer .footer-content {
             display: flex;
             align-items: center;
-            gap: 20px;
         }
 
-        footer .footer-content img {
-            width: 30px;
-            height: auto;
+        footer .footer-content span {
+            margin-left: 10px;
+            font-size: 1.2rem;
         }
 
         footer a {
@@ -178,6 +183,7 @@
                 font-size: 24px;
             }
         }
+
     </style>
 </head>
 <body>
@@ -196,8 +202,8 @@
         <div class="footer-content">
             <a href="/download" target="_blank" title="Stáhnout"><i class="fas fa-download"></i></a>
             <img src="20250206_025121.png" alt="Footer Image" />
+            <span>© 2025</span>
         </div>
-        <span>Mindf*ck Generator © 2025</span>
     </footer>
 
     <script>
