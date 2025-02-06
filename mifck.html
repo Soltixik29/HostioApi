@@ -1,191 +1,216 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta property="og:image" content="20250206_025121.png">
-  <meta property="og:title" content="Mindfuck">
-  <meta property="og:description" content="Mindfuck: {moudro} - Najdi si další na https://fun.hostio.xyz/mifck">
-  <title>Mindfuck</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-  <script src="https://kit.fontawesome.com/6cb2e22ea7.js" crossorigin="anonymous"></script>
-  <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background: linear-gradient(90deg, rgba(38,38,38,1) 0%, rgba(0,0,0,1) 100%);
-      font-family: 'Poppins', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-    .content {
-      text-align: center;
-      max-width: 100%;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      width: 100%;
-      max-width: 600px;
-      transition: background 0.5s ease;
-      backdrop-filter: blur(10px);
-    }
-    .content h1 {
-      font-size: 36px;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 20px;
-      position: relative;
-    }
-    .content h1::before {
-      content: '\f1b2'; /* Bomba Icon */
-      font-family: "Font Awesome 5 Free";
-      position: absolute;
-      top: 0;
-      left: -40px;
-      font-size: 50px;
-      color: #ff3e00;
-    }
-    .motto {
-      font-size: 1.4rem;
-      font-weight: 500;
-      color: #fff;
-      line-height: 1.6;
-      max-height: 180px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      opacity: 0;
-      animation: fadeIn 2s forwards;
-    }
-    .generate-btn {
-      margin-top: 30px;
-      padding: 10px 20px;
-      font-size: 18px;
-      color: #fff;
-      background-color: #ff3e00;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-    .generate-btn:active {
-      transform: scale(0.95);
-    }
-    .generate-btn i {
-      margin-left: 10px;
-      transition: transform 0.3s ease;
-    }
-    .generate-btn i.rotating {
-      transform: rotate(360deg);
-    }
-    .favorite-btn {
-      font-size: 24px;
-      color: #ff3e00;
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      cursor: pointer;
-    }
-    .favorite-btn:hover {
-      color: #ff5722;
-    }
-    .footer {
-      margin-top: 50px;
-      color: #fff;
-      font-size: 12px;
-    }
-    /* Animace textu */
-    @keyframes fadeIn {
-      0% {
-        opacity: 0;
-      }
-      100% {
-        opacity: 1;
-      }
-    }
-    /* Dynamický gradient pro pozadí */
-    @keyframes gradientAnimation {
-      0% {
-        background: linear-gradient(90deg, rgba(38,38,38,1) 0%, rgba(0,0,0,1) 100%);
-      }
-      50% {
-        background: linear-gradient(90deg, rgba(100,38,100,1) 0%, rgba(0,0,0,1) 100%);
-      }
-      100% {
-        background: linear-gradient(90deg, rgba(38,38,38,1) 0%, rgba(0,0,0,1) 100%);
-      }
-    }
-    /* Pro mobilní zařízení */
-    @media (max-width: 768px) {
-      .content {
-        padding: 15px;
-        width: 100%;
-        max-width: 100%;
-        border-radius: 5px;
-      }
-      .motto {
-        font-size: 1.2rem;
-      }
-      .generate-btn {
-        padding: 12px 20px;
-        font-size: 16px;
-      }
-      .favorite-btn {
-        font-size: 20px;
-        top: 5px;
-        right: 5px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Mindf*ck Generator">
+    <meta property="og:description" content="Generátor náhodných moudrů, které vám roztočí hlavu.">
+    <meta property="og:image" content="20250206_025121.png">
+    <meta property="og:url" content="https://fun.hostio.xyz/mifck">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mindf*ck Generator">
+    <meta name="twitter:description" content="Generátor náhodných moudrů, které vám roztočí hlavu.">
+    <meta name="twitter:image" content="20250206_025121.png">
+    <title>Mindf*ck Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/6cb2e22ea7.js" crossorigin="anonymous"></script>
+    <style>
+        /* GLOBAL STYLES */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(45deg, rgba(255, 0, 150, 0.8), rgba(0, 204, 255, 0.8));
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            flex-direction: column;
+        }
+
+        /* Header Image */
+        header img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+            pointer-events: none;
+        }
+
+        /* Box Styles */
+        .box {
+            position: relative;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+            padding: 2rem;
+            width: 400px;
+            max-width: 90vw;
+            text-align: center;
+            display: block;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            overflow: hidden;
+            min-height: auto;
+            height: auto;
+            transition: height 0.3s ease;
+            z-index: 2;
+        }
+
+        /* Text Styles */
+        #mindfck-text {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: white;
+            text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5);
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Generate Button */
+        .generate-btn {
+            margin-top: 1rem;
+            padding: 12px 30px;
+            background: #8e24aa;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .generate-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .generate-btn i {
+            margin-right: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .generate-btn.active i {
+            transform: rotate(360deg);
+        }
+
+        /* Footer Styles */
+        footer {
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 1rem;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Icon Styles */
+        .generate-btn i {
+            font-size: 20px;
+        }
+
+        /* Animation for gradient background */
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* MOBILE RESPONSIVENESS */
+        @media (max-width: 600px) {
+            .box {
+                width: 80%;
+                padding: 1.5rem;
+                font-size: 1rem;
+                box-shadow: none;
+                backdrop-filter: none;
+                border-radius: 10px;
+            }
+
+            #mindfck-text {
+                font-size: 1.5rem;
+                line-height: 1.8;
+            }
+
+            .generate-btn {
+                font-size: 16px;
+                padding: 12px 25px;
+            }
+
+            .generate-btn i {
+                font-size: 24px;
+            }
+        }
+
+    </style>
 </head>
 <body>
-  <div class="content">
-    <h1>Mindfuck <i class="fa-solid fa-bomb"></i></h1>
-    <div class="motto">Loading...</div>
-    <button class="generate-btn" id="generateBtn">Generovat <i class="fa-solid fa-sync"></i></button>
-    <i class="fa-solid fa-heart favorite-btn" id="favoriteBtn"></i>
-    <div class="footer">Powered by fun.hostio.xyz</div>
-  </div>
-  
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const mottoElement = document.querySelector('.motto');
-      const generateBtn = document.getElementById('generateBtn');
-      const favoriteBtn = document.getElementById('favoriteBtn');
-      const url = './fun/mindfuck/v1.json';
+    <header>
+        <img src="20250206_025121.png" alt="Header Image" />
+    </header>
 
-      // Funkce pro načítání a zobrazení moudra
-      async function loadMotto() {
-        try {
-          const response = await fetch(url);
-          const data = await response.json();
-          const randomMotto = data[Math.floor(Math.random() * data.length)];
-          mottoElement.textContent = randomMotto;
-          mottoElement.style.animation = 'fadeIn 2s forwards';
-        } catch (error) {
-          mottoElement.textContent = 'Chyba při načítání moudra!';
+    <div class="box">
+        <div id="mindfck-text">Načítám...</div>
+        <button class="generate-btn" id="generate-btn">
+            <i class="fas fa-sync"></i> Generovat
+        </button>
+    </div>
+
+    <footer>
+        Mindf*ck Generator © 2025
+    </footer>
+
+    <script>
+        // DOM elements
+        const mindfckText = document.getElementById("mindfck-text");
+        const generateBtn = document.getElementById("generate-btn");
+
+        // Fetch random mindfuck from the local JSON file
+        async function fetchMindfck() {
+            try {
+                const response = await fetch('./fun/mindfuck/v1.json'); // This fetches the local file
+                if (!response.ok) {
+                    throw new Error('Síťová chyba: soubor nebyl nalezen');
+                }
+                const data = await response.json();
+                const randomIndex = Math.floor(Math.random() * data.length);
+                mindfckText.textContent = data[randomIndex];
+            } catch (error) {
+                mindfckText.textContent = "Došlo k chybě při načítání moudra.";
+            }
         }
-      }
 
-      // Tlačítko pro generování nového moudra
-      generateBtn.addEventListener('click', () => {
-        mottoElement.style.animation = 'none';
-        mottoElement.offsetHeight; // Trigger reflow to restart animation
-        loadMotto();
-        const icon = generateBtn.querySelector('i');
-        icon.classList.add('rotating');
-        setTimeout(() => {
-          icon.classList.remove('rotating');
-        }, 1000);
-      });
+        // Load a random quote into the box
+        function loadMindfck() {
+            fetchMindfck();
+        }
 
-      // Inicializace a první načtení moudra
-      loadMotto();
-    });
-  </script>
+        // Handle the click event to generate a new quote
+        generateBtn.addEventListener("click", () => {
+            loadMindfck();
+            generateBtn.classList.add("active");
+            setTimeout(() => {
+                generateBtn.classList.remove("active");
+            }, 1000);
+        });
+
+        // On page load, get a random mindfck
+        window.onload = () => {
+            loadMindfck(); // Load the initial quote
+        };
+    </script>
 </body>
 </html>
