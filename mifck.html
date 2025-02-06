@@ -30,46 +30,39 @@
             flex-direction: column;
         }
 
-        /* Header Image */
-        header img {
+        /* Fullscreen Glass Box */
+        .box {
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: auto;
-            pointer-events: none;
-        }
-
-        /* Box Styles */
-        .box {
-            position: relative;
+            width: 100vw;
+            height: 100vh;
             background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
             padding: 2rem;
-            width: 400px;
-            max-width: 90vw;
-            text-align: center;
-            display: block;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            white-space: normal;
-            overflow: hidden;
-            min-height: auto;
-            height: auto;
-            transition: height 0.3s ease;
             z-index: 2;
+            box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            animation: boxAnimation 10s ease infinite;
         }
 
-        /* Text Styles */
+        /* Typing Animation */
         #mindfck-text {
-            font-size: 1.3rem;
-            line-height: 1.8;
+            font-size: 2rem;
             color: white;
             text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5);
             font-weight: 500;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 3px solid rgba(255, 255, 255, 0.75);
+            width: 0;
+            animation: typing 3s steps(30) 1s forwards, blinkCaret 0.75s step-end infinite;
         }
 
         /* Generate Button */
@@ -86,17 +79,10 @@
             align-items: center;
             justify-content: center;
             transition: transform 0.3s ease;
-            margin-left: auto;
-            margin-right: auto;
         }
 
         .generate-btn:hover {
             transform: scale(1.1);
-        }
-
-        .generate-btn:focus {
-            outline: none;
-            box-shadow: 0px 0px 10px rgba(0, 255, 255, 0.7);
         }
 
         .generate-btn i {
@@ -108,31 +94,26 @@
             transform: rotate(360deg);
         }
 
-        /* Copy Button */
-        .copy-btn {
-            background-color: #4caf50;
-            border-radius: 50%;
-            padding: 10px;
-            margin-left: 10px;
-            cursor: pointer;
+        /* Icon Styles */
+        .generate-btn i {
             font-size: 20px;
+        }
+
+        /* Footer Styles */
+        footer {
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
             color: white;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-size: 1rem;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
         }
 
-        .copy-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .copy-btn:focus {
-            outline: none;
-            box-shadow: 0px 0px 10px rgba(0, 255, 255, 0.7);
-        }
-
-        /* Toast */
+        /* Toast Styles */
         .toast {
             position: fixed;
             bottom: 20px;
@@ -141,56 +122,61 @@
             background-color: #4caf50;
             color: white;
             padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 14px;
+            border-radius: 10px;
             display: none;
+            align-items: center;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
             opacity: 0;
-            transition: opacity 0.5s ease, transform 0.3s ease;
-        }
-
-        .toast.success {
-            background-color: #4caf50;
-        }
-
-        .toast.error {
-            background-color: #f44336;
+            transition: opacity 0.5s ease-in-out;
         }
 
         .toast.show {
-            display: block;
-            transform: translateY(10px);
+            display: flex;
             opacity: 1;
         }
 
-        /* Loading Spinner */
-        .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid rgba(255, 255, 255, 1);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
+        .toast .toast-icon {
+            margin-right: 10px;
+            font-size: 20px;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        /* Animations for typing and caret blink */
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
         }
 
-        /* Mobile Responsiveness */
+        @keyframes blinkCaret {
+            50% {
+                border-color: transparent;
+            }
+        }
+
+        /* Gradient Animation */
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Mobile responsiveness */
         @media (max-width: 600px) {
             .box {
-                width: 80%;
                 padding: 1.5rem;
-                font-size: 1rem;
-                box-shadow: none;
-                backdrop-filter: none;
-                border-radius: 10px;
             }
 
             #mindfck-text {
                 font-size: 1.5rem;
-                line-height: 1.8;
+                text-align: center;
+                width: 100%;
+                word-wrap: break-word;
+                white-space: normal;
             }
 
             .generate-btn {
@@ -201,17 +187,7 @@
             .generate-btn i {
                 font-size: 24px;
             }
-
-            .copy-btn {
-                font-size: 22px;
-            }
         }
-
-        /* Dark Mode */
-        body.dark-mode {
-            background: linear-gradient(45deg, rgba(0, 0, 0, 0.8), rgba(0, 204, 255, 0.8));
-        }
-
     </style>
 </head>
 <body>
@@ -221,29 +197,26 @@
 
     <div class="box">
         <div id="mindfck-text">Načítám...</div>
-        <div>
-            <button class="generate-btn" id="generate-btn">
-                <i class="fas fa-sync"></i> Generovat
-            </button>
-            <button class="copy-btn" id="copy-btn">
-                <i class="fas fa-copy"></i>
-            </button>
-        </div>
+        <button class="generate-btn" id="generate-btn">
+            <i class="fas fa-sync"></i> Generovat
+        </button>
     </div>
 
     <footer>
         Mindf*ck Generator © 2025
     </footer>
 
-    <div id="toast" class="toast">Úspěšně zkopírováno!</div>
-    <div id="loading-spinner" class="spinner" style="display: none;"></div>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle toast-icon"></i>
+        Moudro zkopírováno!
+    </div>
 
     <script>
+        // DOM elements
         const mindfckText = document.getElementById("mindfck-text");
         const generateBtn = document.getElementById("generate-btn");
-        const copyBtn = document.getElementById("copy-btn");
         const toast = document.getElementById("toast");
-        const spinner = document.getElementById("loading-spinner");
 
         // Fetch random mindfuck from the local JSON file
         async function fetchMindfck() {
@@ -260,13 +233,12 @@
             }
         }
 
+        // Load a random quote into the box
         function loadMindfck() {
-            spinner.style.display = "block";
-            fetchMindfck().then(() => {
-                spinner.style.display = "none";
-            });
+            fetchMindfck();
         }
 
+        // Handle the click event to generate a new quote
         generateBtn.addEventListener("click", () => {
             loadMindfck();
             generateBtn.classList.add("active");
@@ -274,27 +246,6 @@
                 generateBtn.classList.remove("active");
             }, 1000);
         });
-
-        copyBtn.addEventListener("click", () => {
-            navigator.clipboard.writeText(mindfckText.textContent).then(() => {
-                toast.classList.add("show");
-                setTimeout(() => {
-                    toast.classList.remove("show");
-                }, 5000);
-            });
-        });
-
-        // Handle Dark Mode toggle
-        const themeToggle = document.getElementById("theme-toggle");
-
-        themeToggle.addEventListener("click", () => {
-            document.body.classList.toggle("dark-mode");
-            localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
-        });
-
-        if (localStorage.getItem("theme") === "dark") {
-            document.body.classList.add("dark-mode");
-        }
 
         // On page load, get a random mindfck
         window.onload = () => {
