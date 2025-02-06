@@ -1,145 +1,191 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="Mindf*ck">
-    <meta property="og:description" content="Generátor mindf*ck citátů pro zábavu!">
-    <meta property="og:image" content="20250206_025121.png">
-    <meta property="og:url" content="https://fun.hostio.xyz/mifck">
-    <title>Mindf*ck</title>
-    <script src="https://kit.fontawesome.com/6cb2e22ea7.js" crossorigin="anonymous"></script>
-    <script>
-        // Funkce pro zvukové efekty
-        function playSound() {
-            var sound = new Audio('https://www.soundjay.com/button/beep-07.wav'); // Zde si dej svůj zvukový soubor
-            sound.play();
-        }
-
-        // Funkce pro získání parametru z URL (pro sdílení moudra)
-        function getQuoteFromUrl() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('quote');
-        }
-
-        // Funkce pro generování moudra
-        function generateQuote() {
-            const quotes = [
-                "Když tě učitel nezkouší, je to nejlepší den. Když tě zkouší, je to osudová rána.",
-                "Když se ptáš učitele na něco, co neumíš, jsi zvědavý. Když se ptáš na něco, co on neumí, jsi drzý.",
-                "Když odevzdáš test pozdě, nepočítá se. Když ho učitel oznámkuje pozdě, je to normální."
-            ];
-            let randomIndex = Math.floor(Math.random() * quotes.length);
-            let quoteText = quotes[randomIndex];
-            let quoteElement = document.getElementById('quote');
-            quoteElement.classList.remove('fade-in-text');
-            quoteElement.textContent = quoteText;
-            quoteElement.classList.add('fade-in-text');
-
-            // Po kliknutí na tlačítko "Generovat" vytvoříme URL s moudrem
-            const shareUrl = window.location.origin + window.location.pathname + "?quote=" + encodeURIComponent(quoteText);
-            document.getElementById('shareBtn').setAttribute("data-url", shareUrl);
-        }
-
-        // Funkce pro sdílení
-        function shareQuote() {
-            const shareUrl = document.getElementById('shareBtn').getAttribute("data-url");
-            const shareData = {
-                title: "Mindf*ck",
-                text: document.getElementById('quote').textContent,
-                url: shareUrl
-            };
-            navigator.share(shareData).catch(console.error);
-        }
-
-        // Načítání stránky
-        window.onload = function() {
-            // Zkontrolujeme, jestli je v URL parametr 'quote'
-            const quoteFromUrl = getQuoteFromUrl();
-            if (quoteFromUrl) {
-                document.getElementById('quote').textContent = decodeURIComponent(quoteFromUrl);
-            } else {
-                generateQuote(); // Pokud není parametr v URL, vygenerujeme náhodný
-            }
-        };
-    </script>
-    <style>
-        /* Animace pro pozadí */
-        @keyframes gradientBackground {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Hlavní animace pro text */
-        .fade-in-text {
-            animation: fadeIn 1s ease-out;
-        }
-
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        /* Animace pro generování písmen */
-        .typing {
-            animation: typing 2s steps(30) 1s forwards;
-        }
-
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-
-        /* Responsivní úpravy pro mobil */
-        @media (max-width: 600px) {
-            body {
-                font-size: 18px;
-            }
-
-            .box {
-                padding: 20px;
-            }
-        }
-
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:image" content="20250206_025121.png">
+  <meta property="og:title" content="Mindfuck">
+  <meta property="og:description" content="Mindfuck: {moudro} - Najdi si další na https://fun.hostio.xyz/mifck">
+  <title>Mindfuck</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/6cb2e22ea7.js" crossorigin="anonymous"></script>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: linear-gradient(90deg, rgba(38,38,38,1) 0%, rgba(0,0,0,1) 100%);
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    .content {
+      text-align: center;
+      max-width: 100%;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 600px;
+      transition: background 0.5s ease;
+      backdrop-filter: blur(10px);
+    }
+    .content h1 {
+      font-size: 36px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .content h1::before {
+      content: '\f1b2'; /* Bomba Icon */
+      font-family: "Font Awesome 5 Free";
+      position: absolute;
+      top: 0;
+      left: -40px;
+      font-size: 50px;
+      color: #ff3e00;
+    }
+    .motto {
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: #fff;
+      line-height: 1.6;
+      max-height: 180px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      opacity: 0;
+      animation: fadeIn 2s forwards;
+    }
+    .generate-btn {
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 18px;
+      color: #fff;
+      background-color: #ff3e00;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .generate-btn:active {
+      transform: scale(0.95);
+    }
+    .generate-btn i {
+      margin-left: 10px;
+      transition: transform 0.3s ease;
+    }
+    .generate-btn i.rotating {
+      transform: rotate(360deg);
+    }
+    .favorite-btn {
+      font-size: 24px;
+      color: #ff3e00;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      cursor: pointer;
+    }
+    .favorite-btn:hover {
+      color: #ff5722;
+    }
+    .footer {
+      margin-top: 50px;
+      color: #fff;
+      font-size: 12px;
+    }
+    /* Animace textu */
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+    /* Dynamický gradient pro pozadí */
+    @keyframes gradientAnimation {
+      0% {
+        background: linear-gradient(90deg, rgba(38,38,38,1) 0%, rgba(0,0,0,1) 100%);
+      }
+      50% {
+        background: linear-gradient(90deg, rgba(100,38,100,1) 0%, rgba(0,0,0,1) 100%);
+      }
+      100% {
+        background: linear-gradient(90deg, rgba(38,38,38,1) 0%, rgba(0,0,0,1) 100%);
+      }
+    }
+    /* Pro mobilní zařízení */
+    @media (max-width: 768px) {
+      .content {
+        padding: 15px;
+        width: 100%;
+        max-width: 100%;
+        border-radius: 5px;
+      }
+      .motto {
+        font-size: 1.2rem;
+      }
+      .generate-btn {
+        padding: 12px 20px;
+        font-size: 16px;
+      }
+      .favorite-btn {
+        font-size: 20px;
+        top: 5px;
+        right: 5px;
+      }
+    }
+  </style>
 </head>
-<body class="bg-gradient-to-r from-purple-500 to-blue-500 overflow-hidden">
+<body>
+  <div class="content">
+    <h1>Mindfuck <i class="fa-solid fa-bomb"></i></h1>
+    <div class="motto">Loading...</div>
+    <button class="generate-btn" id="generateBtn">Generovat <i class="fa-solid fa-sync"></i></button>
+    <i class="fa-solid fa-heart favorite-btn" id="favoriteBtn"></i>
+    <div class="footer">Powered by fun.hostio.xyz</div>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const mottoElement = document.querySelector('.motto');
+      const generateBtn = document.getElementById('generateBtn');
+      const favoriteBtn = document.getElementById('favoriteBtn');
+      const url = './fun/mindfuck/v1.json';
 
-    <!-- Header image -->
-    <img src="20250206_025121.png" alt="Header Image" class="w-full" draggable="false">
+      // Funkce pro načítání a zobrazení moudra
+      async function loadMotto() {
+        try {
+          const response = await fetch(url);
+          const data = await response.json();
+          const randomMotto = data[Math.floor(Math.random() * data.length)];
+          mottoElement.textContent = randomMotto;
+          mottoElement.style.animation = 'fadeIn 2s forwards';
+        } catch (error) {
+          mottoElement.textContent = 'Chyba při načítání moudra!';
+        }
+      }
 
-    <!-- Main container -->
-    <div class="flex justify-center items-center h-screen">
-        <div class="box w-3/4 md:w-1/2 lg:w-1/3 bg-white bg-opacity-70 p-6 rounded-lg shadow-lg relative">
-            <div class="text-center mb-4">
-                <h1 class="text-3xl text-center font-semibold text-gray-800">Mindf*ck</h1>
-            </div>
+      // Tlačítko pro generování nového moudra
+      generateBtn.addEventListener('click', () => {
+        mottoElement.style.animation = 'none';
+        mottoElement.offsetHeight; // Trigger reflow to restart animation
+        loadMotto();
+        const icon = generateBtn.querySelector('i');
+        icon.classList.add('rotating');
+        setTimeout(() => {
+          icon.classList.remove('rotating');
+        }, 1000);
+      });
 
-            <!-- Moudro (quote) -->
-            <div id="quote" class="text-xl text-gray-900 font-semibold fade-in-text typing"></div>
-
-            <!-- Generovat tlačítko -->
-            <div class="flex justify-center mt-4">
-                <button id="generateBtn" class="bg-purple-500 text-white px-6 py-2 rounded-full shadow-md hover:bg-purple-600 transition duration-300" onclick="generateQuote(); playSound();">
-                    Generovat
-                </button>
-            </div>
-
-            <!-- Share ikona ve spodním rohu -->
-            <div class="absolute bottom-0 right-0 p-2">
-                <button id="shareBtn" class="text-white text-2xl bg-purple-600 p-2 rounded-full" onclick="shareQuote()">
-                    <i class="fa-regular fa-share-from-square"></i>
-                </button>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <div class="text-center py-4 bg-black text-white mt-8">
-        <p>&copy; 2025 Mindf*ck. Všechna práva vyhrazena.</p>
-    </div>
-
+      // Inicializace a první načtení moudra
+      loadMotto();
+    });
+  </script>
 </body>
 </html>
