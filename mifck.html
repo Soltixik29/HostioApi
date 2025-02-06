@@ -155,6 +155,35 @@
             }
         }
 
+        /* Toast Styles */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4caf50; /* Green background for success */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            display: none;
+            align-items: center;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .toast.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .toast .toast-icon {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
     </style>
 </head>
 <body>
@@ -167,16 +196,25 @@
         <button class="generate-btn" id="generate-btn">
             <i class="fas fa-sync"></i> Generovat
         </button>
+        <button id="copy-btn">Kopírovat</button>
     </div>
 
     <footer>
         Mindf*ck Generator © 2025
     </footer>
 
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle toast-icon"></i>
+        Moudro zkopírováno!
+    </div>
+
     <script>
         // DOM elements
         const mindfckText = document.getElementById("mindfck-text");
         const generateBtn = document.getElementById("generate-btn");
+        const copyBtn = document.getElementById("copy-btn");
+        const toast = document.getElementById("toast");
 
         // Fetch random mindfuck from the local JSON file
         async function fetchMindfck() {
@@ -205,6 +243,19 @@
             setTimeout(() => {
                 generateBtn.classList.remove("active");
             }, 1000);
+        });
+
+        // Copy the current quote to clipboard
+        copyBtn.addEventListener("click", () => {
+            navigator.clipboard.writeText(mindfckText.textContent).then(() => {
+                // Show the toast notification
+                toast.classList.add("show");
+                setTimeout(() => {
+                    toast.classList.remove("show");
+                }, 5000);
+            }).catch((err) => {
+                alert("Chyba při kopírování: " + err);
+            });
         });
 
         // On page load, get a random mindfck
