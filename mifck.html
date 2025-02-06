@@ -16,7 +16,6 @@
             font-family: 'Orbitron', sans-serif;
         }
 
-        /* Větší text pro titulek */
         header {
             font-size: 6rem;
             font-weight: 800;
@@ -25,19 +24,6 @@
             align-items: center;
             text-align: center;
             color: white;
-        }
-
-        .fade-in {
-            animation: fadeIn 1s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
         }
 
         .countdown {
@@ -56,7 +42,11 @@
             display: none;
         }
 
-        /* Větší box pro mobilní zobrazení */
+        .icon {
+            font-size: 2.5rem;
+            margin-right: 1rem;
+        }
+
         @media (max-width: 768px) {
             header {
                 font-size: 5rem;
@@ -80,12 +70,6 @@
             }
         }
 
-        .icon {
-            font-size: 2.5rem;
-            margin-right: 1rem;
-        }
-
-        /* Větší text pro desktop */
         @media (min-width: 768px) {
             .countdown {
                 font-size: 5rem;
@@ -116,19 +100,28 @@
             left: 2rem;
         }
 
-        /* Animace pro countdown */
-        .countdown-animation {
-            animation: countdownAnimation 1s ease-in-out;
+        .button {
+            background-color: #6366f1;
+            padding: 0.8rem 2rem;
+            color: white;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1.25rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 2rem;
+            transition: background-color 0.3s ease;
         }
 
-        @keyframes countdownAnimation {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
+        .button:hover {
+            background-color: #4f46e5;
         }
+
+        .button i {
+            margin-left: 0.5rem;
+        }
+
     </style>
 </head>
 <body class="bg-gradient-to-r from-purple-500 to-indigo-600 min-h-screen flex justify-center items-center text-white flex-col">
@@ -138,12 +131,6 @@
         <span>Mindf*ck</span>
         <i class="fas fa-bomb ml-4 text-yellow-400"></i> <!-- Explosion Icon -->
     </header>
-
-    <!-- Countdown nahoře -->
-    <div id="countdown-timer" class="countdown mb-6 text-center flex justify-center items-center countdown-animation">
-        <i class="fas fa-clock mr-2 text-white"></i> <!-- Clock Icon -->
-        <span id="countdown-timer-text">00:00:00</span>
-    </div>
 
     <!-- Box s mindfuck textem a ikonkou na levém rohu -->
     <div id="mindfuck-box" class="box w-4/5 md:w-1/2 lg:w-1/3">
@@ -156,20 +143,18 @@
             <span class="loader">Načítání...</span>
         </div>
         <div class="error-message text-center hidden mt-4" id="error-message"></div>
+
+        <!-- Button pro generování nového mindfucku -->
+        <button id="generate-btn" class="button">
+            Generovat nový
+            <i class="fas fa-sync-alt"></i> <!-- Sync Icon -->
+        </button>
     </div>
 
     <script>
         const mindfuckTextElement = document.getElementById('mindfuck-text');
         const errorMessageElement = document.getElementById('error-message');
-        const countdownTextElement = document.getElementById('countdown-timer-text');
-
-        // Funkce pro naformátování času
-        function formatTime(seconds) {
-            const hours = String(Math.floor(seconds / 3600)).padStart(2, '0');
-            const minutes = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
-            const remainingSeconds = String(seconds % 60).padStart(2, '0');
-            return `${hours}:${minutes}:${remainingSeconds}`;
-        }
+        const generateButton = document.getElementById('generate-btn');
 
         // Funkce pro načtení mindfucks z /fun/mindfuck/v1.json
         async function loadMindfuck() {
@@ -180,7 +165,7 @@
                 }
                 const mindfucks = await response.json();
                 const randomIndex = Math.floor(Math.random() * mindfucks.length);
-                return mindfucks[randomIndex];
+                mindfuckTextElement.textContent = mindfucks[randomIndex];
             } catch (error) {
                 console.error('Chyba při načítání moudra:', error);
                 errorMessageElement.textContent = 'Chyba při načítání moudra. Zkuste to znovu.';
@@ -189,46 +174,15 @@
             }
         }
 
-        // Funkce pro naformátování a zobrazení času
-        function startCountdown(duration) {
-            let remainingTime = duration;
+        // Generování nového moudra po kliknutí na tlačítko
+        generateButton.addEventListener('click', function () {
+            mindfuckTextElement.textContent = 'Načítání nového moudra...';
+            loadMindfuck();
+        });
 
-            const interval = setInterval(() => {
-                countdownTextElement.textContent = formatTime(remainingTime);
-                remainingTime--;
-
-                if (remainingTime < 0) {
-                    clearInterval(interval);
-                    localStorage.setItem('countdown-time', Date.now());
-                }
-            }, 1000);
-        }
-
-        // Zjistíme, jaký čas zůstal od posledního načtení a nastavíme nový
-        function checkAndSetTimer() {
-            const savedTime = localStorage.getItem('countdown-time');
-            const currentTime = Date.now();
-            const resetDuration = 24 * 60 * 60 * 1000; // 24 hodin
-
-            if (savedTime && currentTime - savedTime < resetDuration) {
-                const elapsed = Math.floor((currentTime - savedTime) / 1000);
-                startCountdown(86400 - elapsed); // Zbývající čas na 24 hodin
-            } else {
-                startCountdown(86400); // Resetujeme na 24 hodin
-                localStorage.setItem('countdown-time', currentTime);
-            }
-        }
-
-        function displayMindfuck() {
-            loadMindfuck().then((mindfuck) => {
-                mindfuckTextElement.textContent = mindfuck;
-            });
-        }
-
-        // Načteme všechny funkce při načtení stránky
+        // Načteme první mindf*ck při načtení stránky
         window.onload = function () {
-            checkAndSetTimer();
-            displayMindfuck();
+            loadMindfuck();
         };
     </script>
 </body>
