@@ -47,22 +47,20 @@
             backdrop-filter: blur(10px);
             border-radius: 15px;
             box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
-            padding: 3rem; /* Increased padding */
-            width: 600px; /* Increased width */
+            padding: 3rem;
+            width: 600px;
             max-width: 90vw;
             text-align: center;
             display: block;
             word-wrap: break-word;
             overflow-wrap: break-word;
             white-space: normal;
-            overflow: hidden;
-            min-height: auto;
             height: auto;
             transition: height 0.3s ease;
             z-index: 2;
         }
 
-        /* Text Styles */
+        /* Typing Animation Styles */
         #mindfck-text {
             font-size: 1.3rem;
             line-height: 1.8;
@@ -70,6 +68,20 @@
             text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5);
             font-weight: 500;
             margin-bottom: 1.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 3px solid #fff;
+            width: 0;
+            animation: typing 3s steps(40) forwards, blinkCaret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+
+        @keyframes blinkCaret {
+            50% { border-color: transparent; }
         }
 
         /* Generate Button */
@@ -123,15 +135,13 @@
         footer a {
             color: white;
             text-decoration: none;
-            padding: 10px 20px;
-            background-color: #8e24aa;
-            border-radius: 5px;
-            transition: transform 0.3s ease, background-color 0.3s ease;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease, color 0.3s ease;
         }
 
         footer a:hover {
-            transform: scale(1.1);
-            background-color: #6a1b9a;
+            transform: scale(1.2);
+            color: #8e24aa;
         }
 
         /* Icon Styles */
@@ -187,7 +197,7 @@
     </div>
 
     <footer>
-        <a href="/download" target="_blank">Stáhnout</a>
+        <a href="/download" target="_blank" title="Stáhnout"><i class="fas fa-download"></i></a>
         <span>Mindf*ck Generator © 2025</span>
     </footer>
 
@@ -206,6 +216,11 @@
                 const data = await response.json();
                 const randomIndex = Math.floor(Math.random() * data.length);
                 mindfckText.textContent = data[randomIndex];
+                // Reset typing animation
+                mindfckText.style.width = '0'; // Reset width for reanimation
+                setTimeout(() => {
+                    mindfckText.style.width = mindfckText.scrollWidth + 'px'; // Trigger animation
+                }, 50);
             } catch (error) {
                 mindfckText.textContent = "Došlo k chybě při načítání moudra.";
             }
