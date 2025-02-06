@@ -75,16 +75,6 @@
             transform: rotate(360deg);
         }
 
-        /* FAVORITE BUTTON */
-        .favorite-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 20px;
-            cursor: pointer;
-            color: #ff4081;
-        }
-
         /* MOBILE RESPONSIVENESS */
         @media (max-width: 600px) {
             .box {
@@ -104,28 +94,29 @@
         <button class="generate-btn" id="generate-btn">
             <i class="fas fa-sync"></i> Generovat
         </button>
-        <div class="favorite-btn" id="favorite-btn">
-            <i class="fas fa-heart"></i>
-        </div>
     </div>
 
     <script>
         // DOM elements
         const mindfckText = document.getElementById("mindf*ck-text");
         const generateBtn = document.getElementById("generate-btn");
-        const favoriteBtn = document.getElementById("favorite-btn");
 
-        // Sample Mindf*ck quotes (replace with your JSON source later)
-        const mindfucks = [
-            "Když tě učitel nezkouší, je to nejlepší den. Když tě zkouší, je to osudová rána.",
-            "Když se ptáš učitele na něco, co neumíš, jsi zvědavý. Když se ptáš na něco, co on neumí, jsi drzý.",
-            "Když odevzdáš test pozdě, nepočítá se. Když ho učitel oznámkuje pozdě, je to normální."
-        ];
+        // Fetch random mindfuck from the API
+        async function fetchMindf*ck() {
+            try {
+                const response = await fetch('https://api.hostio.xyz/fun/mindfuck/v1.json');
+                const data = await response.json();
+                const randomIndex = Math.floor(Math.random() * data.length);
+                mindfckText.textContent = data[randomIndex];
+            } catch (error) {
+                mindfckText.textContent = "Došlo k chybě při načítání moudra.";
+                console.error("Chyba při načítání:", error);
+            }
+        }
 
         // Load a random quote into the box
         function loadMindf*ck() {
-            const randomIndex = Math.floor(Math.random() * mindfucks.length);
-            mindfckText.textContent = mindfucks[randomIndex];
+            fetchMindf*ck();
         }
 
         // Handle the click event to generate a new quote
@@ -137,22 +128,9 @@
             }, 1000);
         });
 
-        // Handle the favorite button click (saving and displaying favorite quotes)
-        favoriteBtn.addEventListener("click", () => {
-            // Here you can save the current quote in LocalStorage
-            const currentText = mindfckText.textContent;
-            localStorage.setItem("favorite", currentText);
-            alert("Moudro přidáno do oblíbených!");
-        });
-
-        // On page load, get the favorite if it exists
+        // On page load, get a random mindf*ck
         window.onload = () => {
             loadMindf*ck(); // Load the initial quote
-
-            const favorite = localStorage.getItem("favorite");
-            if (favorite) {
-                alert("Oblíbené moudro: " + favorite);
-            }
         };
 
     </script>
