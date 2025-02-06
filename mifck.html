@@ -3,6 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Mindf*ck Generator">
+    <meta property="og:description" content="Generátor náhodných moudrů, které vám roztočí hlavu.">
+    <meta property="og:image" content="https://example.com/path/to/your-image.jpg">
+    <meta property="og:url" content="https://example.com">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mindf*ck Generator">
+    <meta name="twitter:description" content="Generátor náhodných moudrů, které vám roztočí hlavu.">
+    <meta name="twitter:image" content="https://example.com/path/to/your-image.jpg">
     <title>Mindf*ck Generator</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/6cb2e22ea7.js" crossorigin="anonymous"></script>
@@ -11,8 +19,9 @@
         body {
             margin: 0;
             font-family: 'Poppins', sans-serif;
-            background: #1e1e1e;
-            color: white;
+            background: linear-gradient(45deg, rgba(255, 0, 150, 0.8), rgba(0, 204, 255, 0.8));
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -20,6 +29,8 @@
             overflow: hidden;
             flex-direction: column;
         }
+
+        /* Header Image */
         header img {
             position: absolute;
             top: 0;
@@ -29,7 +40,7 @@
             pointer-events: none;
         }
 
-        /* BOX STYLES */
+        /* Box Styles */
         .box {
             position: relative;
             background: rgba(0, 0, 0, 0.4);
@@ -51,7 +62,7 @@
             z-index: 2;
         }
 
-        /* TEXT STYLES */
+        /* Text Styles */
         #mindfck-text {
             font-size: 1.2rem;
             line-height: 1.6;
@@ -61,7 +72,7 @@
             margin-bottom: 1.5rem;
         }
 
-        /* GENERATE BUTTON */
+        /* Generate Button */
         .generate-btn {
             margin-top: 1rem;
             padding: 12px 30px;
@@ -92,16 +103,16 @@
             transform: rotate(360deg);
         }
 
-        /* SHARE BUTTON */
+        /* Share Button */
         .share-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
             background: transparent;
             border: none;
             cursor: pointer;
             color: white;
-            font-size: 40px;
+            font-size: 30px;
             z-index: 3;
             transition: transform 0.3s ease;
         }
@@ -110,9 +121,30 @@
             transform: scale(1.1);
         }
 
-        /* ICON STYLES */
+        /* Footer Styles */
+        footer {
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 1rem;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Icon Styles */
         .generate-btn i {
             font-size: 20px;
+        }
+
+        /* Animation for gradient background */
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         /* MOBILE RESPONSIVENESS */
@@ -139,20 +171,6 @@
             .generate-btn i {
                 font-size: 24px;
             }
-
-            /* Gradient Background for mobile */
-            body {
-                background: linear-gradient(45deg, rgba(255, 0, 150, 0.8), rgba(0, 204, 255, 0.8));
-                background-size: 400% 400%;
-                animation: gradientAnimation 15s ease infinite;
-            }
-
-            /* Animation for gradient background */
-            @keyframes gradientAnimation {
-                0% { background-position: 0% 50%; }
-                50% { background-position: 100% 50%; }
-                100% { background-position: 0% 50%; }
-            }
         }
 
     </style>
@@ -161,16 +179,20 @@
     <header>
         <img src="20250206_025121.png" alt="Header Image" />
     </header>
+
     <div class="box">
         <div id="mindfck-text">Načítám...</div>
         <button class="generate-btn" id="generate-btn">
             <i class="fas fa-sync"></i> Generovat
         </button>
+        <button class="share-btn" id="share-btn">
+            <i class="fa-regular fa-share-from-square"></i>
+        </button>
     </div>
 
-    <button class="share-btn" id="share-btn">
-        <i class="fas fa-share-alt"></i> 
-    </button>
+    <footer>
+        Mindf*ck Generator © 2025 - Made by Denis Bušek
+    </footer>
 
     <script>
         // DOM elements
@@ -225,7 +247,6 @@
         window.onload = () => {
             loadMindfck(); // Load the initial quote
         };
-
     </script>
 </body>
 </html>
