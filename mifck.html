@@ -28,6 +28,7 @@
             min-height: 100vh;
             overflow: hidden;
             flex-direction: column;
+            padding-bottom: 80px; /* Extra space to prevent content overlap with sticky footer */
         }
 
         /* Header Image */
@@ -60,7 +61,7 @@
             z-index: 2;
         }
 
-        /* Typing effect */
+        /* Text Styles */
         #mindfck-text {
             font-size: 1.3rem;
             line-height: 1.8;
@@ -68,26 +69,6 @@
             text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5);
             font-weight: 500;
             margin-bottom: 1.5rem;
-            overflow: hidden;
-            white-space: nowrap;
-            border-right: 3px solid white;
-            width: 0;
-            animation: typing 3s steps(30) forwards, blink 0.75s step-end infinite;
-        }
-
-        @keyframes typing {
-            from {
-                width: 0;
-            }
-            to {
-                width: 100%;
-            }
-        }
-
-        @keyframes blink {
-            50% {
-                border-color: transparent;
-            }
         }
 
         /* Generate Button */
@@ -123,19 +104,29 @@
 
         /* Footer Styles */
         footer {
-            position: fixed;
-            bottom: 10px;
+            position: sticky;
+            bottom: 0;
             width: 100%;
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
             color: white;
             font-size: 1rem;
-            padding: 15px 20px;
-            background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(5px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        footer .footer-content {
             display: flex;
-            justify-content: center;
+            align-items: center;
             gap: 20px;
+        }
+
+        footer .footer-content img {
+            width: 30px;
+            height: auto;
         }
 
         footer a {
@@ -187,7 +178,6 @@
                 font-size: 24px;
             }
         }
-
     </style>
 </head>
 <body>
@@ -203,7 +193,10 @@
     </div>
 
     <footer>
-        <a href="/download" target="_blank" title="Stáhnout"><i class="fas fa-download"></i></a>
+        <div class="footer-content">
+            <a href="/download" target="_blank" title="Stáhnout"><i class="fas fa-download"></i></a>
+            <img src="20250206_025121.png" alt="Footer Image" />
+        </div>
         <span>Mindf*ck Generator © 2025</span>
     </footer>
 
@@ -221,19 +214,7 @@
                 }
                 const data = await response.json();
                 const randomIndex = Math.floor(Math.random() * data.length);
-                const newText = data[randomIndex];
-                mindfckText.textContent = ""; // Clear previous text
-
-                // Typing animation by simulating the typing of each character
-                let i = 0;
-                const typingInterval = setInterval(() => {
-                    mindfckText.textContent += newText[i];
-                    i++;
-                    if (i === newText.length) {
-                        clearInterval(typingInterval); // Stop the typing animation
-                    }
-                }, 100); // Typing speed
-
+                mindfckText.textContent = data[randomIndex];
             } catch (error) {
                 mindfckText.textContent = "Došlo k chybě při načítání moudra.";
             }
