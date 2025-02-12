@@ -6,15 +6,19 @@
     <title>Geometry Dash</title>
     <style>
         body { 
-            text-align: center; 
             margin: 0; 
-            overflow: hidden;
-            background-color: #181818;
+            overflow: hidden; 
+            background: #181818;
         }
         canvas { 
-            background: #222; 
+            background: #1d1d1d; 
             display: block; 
             margin: auto;
+            border: 2px solid #000;
+        }
+        * {
+            margin: 0;
+            padding: 0;
         }
     </style>
 </head>
@@ -24,6 +28,7 @@
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
 
+        // Resize canvas to fit window
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -32,38 +37,47 @@
         window.addEventListener("resize", resizeCanvas);
         resizeCanvas();
 
+        // Player properties
         let player = { 
             x: 50, 
             y: canvas.height - 150, 
-            width: 30, 
-            height: 30, 
+            width: 40, 
+            height: 40, 
             dy: 0, 
             gravity: 0.8, 
             jumpPower: -15, 
-            onGround: false 
+            onGround: false, 
+            color: '#00b0ff' // Geometry Dash player color
         };
+
+        // Obstacles
         let obstacles = [];
         let speed = 5;
         let gameRunning = true;
         let score = 0;
 
+        // Create obstacles
         function createObstacle() {
             let gapHeight = Math.floor(Math.random() * (canvas.height / 2)) + 100;
             let obstacleHeight = Math.floor(Math.random() * (canvas.height / 4)) + 40;
             obstacles.push({ 
                 x: canvas.width, 
                 y: canvas.height - obstacleHeight, 
-                width: 30, 
-                height: obstacleHeight 
+                width: 40, 
+                height: obstacleHeight, 
+                color: '#ff0044' // Red obstacle
             });
         }
 
+        // Update game elements
         function update() {
             if (!gameRunning) return;
 
+            // Update player gravity and movement
             player.dy += player.gravity;
             player.y += player.dy;
 
+            // Prevent player from falling below ground
             if (player.y >= canvas.height - 150) { 
                 player.y = canvas.height - 150; 
                 player.onGround = true; 
@@ -82,7 +96,7 @@
                     score++;
                 }
 
-                // Check for collision
+                // Check for collision with player
                 if (player.x < obstacle.x + obstacle.width && player.x + player.width > obstacle.x &&
                     player.y < obstacle.y + obstacle.height && player.y + player.height > obstacle.y) {
                     gameRunning = false;
@@ -90,35 +104,47 @@
                 }
             });
 
-            // Generate new obstacles
+            // Generate new obstacles periodically
             if (Math.random() < 0.02) {
                 createObstacle();
             }
         }
 
+        // Draw game elements
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Draw player
-            ctx.fillStyle = "cyan";
+            // Draw background (a simple color gradient or dark backdrop)
+            let grd = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            grd.addColorStop(0, "#1d1d1d");
+            grd.addColorStop(1, "#111");
+            ctx.fillStyle = grd;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw player (geometry dash player looks cyan and simple)
+            ctx.fillStyle = player.color;
             ctx.fillRect(player.x, player.y, player.width, player.height);
 
-            // Draw obstacles
-            ctx.fillStyle = "red";
-            obstacles.forEach(obstacle => ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height));
+            // Draw obstacles (red, simple blocks)
+            obstacles.forEach(obstacle => {
+                ctx.fillStyle = obstacle.color;
+                ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+            });
 
             // Draw score
-            ctx.fillStyle = "white";
+            ctx.fillStyle = "#ffffff";
             ctx.font = "30px Arial";
             ctx.fillText("Score: " + score, 20, 40);
         }
 
+        // Main game loop
         function gameLoop() {
             update();
             draw();
             requestAnimationFrame(gameLoop);
         }
 
+        // Event listeners for player input (space bar and touch)
         document.addEventListener("keydown", (e) => {
             if (e.code === "Space" && player.onGround) {
                 player.dy = player.jumpPower;
@@ -133,6 +159,7 @@
             }
         });
 
+        // Start game loop
         gameLoop();
     </script>
 </body>
