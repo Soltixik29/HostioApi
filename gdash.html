@@ -5,8 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Geometry Dash</title>
     <style>
-        body { text-align: center; margin: 0; overflow: hidden; }
-        canvas { background: #222; display: block; margin: auto; }
+        body { 
+            text-align: center; 
+            margin: 0; 
+            overflow: hidden;
+            background-color: #181818;
+        }
+        canvas { 
+            background: #222; 
+            display: block; 
+            margin: auto;
+        }
     </style>
 </head>
 <body>
@@ -14,67 +23,116 @@
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
-        
+
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         }
-        
+
         window.addEventListener("resize", resizeCanvas);
         resizeCanvas();
-        
-        let player = { x: 50, y: canvas.height - 100, width: 30, height: 30, dy: 0, gravity: 0.5, jumpPower: -10, onGround: false };
-        let obstacles = [{ x: canvas.width, y: canvas.height - 80, width: 30, height: 30 }];
+
+        let player = { 
+            x: 50, 
+            y: canvas.height - 150, 
+            width: 30, 
+            height: 30, 
+            dy: 0, 
+            gravity: 0.8, 
+            jumpPower: -15, 
+            onGround: false 
+        };
+        let obstacles = [];
         let speed = 5;
         let gameRunning = true;
-        
+        let score = 0;
+
+        function createObstacle() {
+            let gapHeight = Math.floor(Math.random() * (canvas.height / 2)) + 100;
+            let obstacleHeight = Math.floor(Math.random() * (canvas.height / 4)) + 40;
+            obstacles.push({ 
+                x: canvas.width, 
+                y: canvas.height - obstacleHeight, 
+                width: 30, 
+                height: obstacleHeight 
+            });
+        }
+
         function update() {
             if (!gameRunning) return;
-            
+
             player.dy += player.gravity;
             player.y += player.dy;
-            if (player.y >= canvas.height - 100) { player.y = canvas.height - 100; player.onGround = true; player.dy = 0; }
-            
-            obstacles.forEach(obstacle => {
+
+            if (player.y >= canvas.height - 150) { 
+                player.y = canvas.height - 150; 
+                player.onGround = true; 
+                player.dy = 0; 
+            } else {
+                player.onGround = false;
+            }
+
+            // Move obstacles and check collision
+            obstacles.forEach((obstacle, index) => {
                 obstacle.x -= speed;
-                if (obstacle.x + obstacle.width < 0) obstacle.x = canvas.width;
+
+                // Remove obstacles when off-screen
+                if (obstacle.x + obstacle.width < 0) {
+                    obstacles.splice(index, 1);
+                    score++;
+                }
+
+                // Check for collision
                 if (player.x < obstacle.x + obstacle.width && player.x + player.width > obstacle.x &&
                     player.y < obstacle.y + obstacle.height && player.y + player.height > obstacle.y) {
                     gameRunning = false;
-                    alert("Game Over! Refresh to try again.");
+                    alert("Game Over! Score: " + score + ". Refresh to try again.");
                 }
             });
+
+            // Generate new obstacles
+            if (Math.random() < 0.02) {
+                createObstacle();
+            }
         }
-        
+
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw player
             ctx.fillStyle = "cyan";
             ctx.fillRect(player.x, player.y, player.width, player.height);
-            
+
+            // Draw obstacles
             ctx.fillStyle = "red";
             obstacles.forEach(obstacle => ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height));
+
+            // Draw score
+            ctx.fillStyle = "white";
+            ctx.font = "30px Arial";
+            ctx.fillText("Score: " + score, 20, 40);
         }
-        
+
         function gameLoop() {
             update();
             draw();
             requestAnimationFrame(gameLoop);
         }
-        
+
         document.addEventListener("keydown", (e) => {
             if (e.code === "Space" && player.onGround) {
                 player.dy = player.jumpPower;
                 player.onGround = false;
             }
         });
-        
+
         canvas.addEventListener("touchstart", () => {
             if (player.onGround) {
                 player.dy = player.jumpPower;
                 player.onGround = false;
             }
         });
-        
+
         gameLoop();
     </script>
 </body>
