@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
@@ -9,6 +9,11 @@
             margin: 0; 
             overflow: hidden; 
             background: #181818;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
         }
         canvas { 
             background: #1d1d1d; 
@@ -16,24 +21,29 @@
             margin: auto;
             border: 2px solid #000;
         }
+        select {
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        option {
+            background-color: #333;
+        }
     </style>
 </head>
 <body>
+    <select id="levelSelect">
+        <option value="">Select a Level</option>
+    </select>
     <canvas id="gameCanvas"></canvas>
+
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
+        const levelSelect = document.getElementById("levelSelect");
 
-        // Resize canvas to fit window
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-
-        window.addEventListener("resize", resizeCanvas);
-        resizeCanvas();
-
-        // Player properties
         let player = { 
             x: 50, 
             y: canvas.height - 150, 
@@ -43,33 +53,58 @@
             gravity: 0.8, 
             jumpPower: -15, 
             onGround: false, 
-            color: '#00b0ff' // Geometry Dash player color
+            color: '#00b0ff' 
         };
-
-        // Level setup: Each level will have platforms (#), spikes (@) and empty space (+)
-        const levels = [
-            [
-                "########################################",
-                "#                                      #",
-                "#    #           #    #    #           #",
-                "#    #           #    #    #           #",
-                "#    ##########  ##########    #########",
-                "#                       @              #",
-                "#           #######                   @#",
-                "#    #                            #######",
-                "#         @      #                  #   #",
-                "########################################"
-            ],
-            // You can define more levels by adding more arrays of strings
-        ];
+        
+        let levelData = [];
         let currentLevel = 0;
-        let levelData = levels[currentLevel];
         let obstacles = [];
         let speed = 5;
-        let gameRunning = true;
+        let gameRunning = false;
         let score = 0;
 
-        // Create obstacles based on the level
+        // Simulate loading levels from ./levels folder
+        async function loadLevels() {
+            const levelsFolder = './levels/';
+            let levels = [];
+            let files = ["1.txt", "2.txt", "3.txt"]; // Simulate files; this could be dynamic if a server is involved
+            
+            for (let i = 0; i < files.length; i++) {
+                const levelFile = files[i];
+                const response = await fetch(`${levelsFolder}${levelFile}`);
+                if (response.ok) {
+                    const text = await response.text();
+                    const lines = text.split("\n");
+                    const name = lines[0].split(":")[1].trim();
+                    levels.push({ name, data: lines.slice(1) });
+                }
+            }
+
+            // Populate the select menu with levels
+            levels.forEach((level, index) => {
+                const option = document.createElement("option");
+                option.value = index;
+                option.textContent = level.name;
+                levelSelect.appendChild(option);
+            });
+
+            return levels;
+        }
+
+        // Start the game
+        function startGame(levelIndex) {
+            currentLevel = levelIndex;
+            levelData = levels[currentLevel].data;
+            obstacles = [];
+            createObstacles();
+            player.x = 50;
+            player.y = canvas.height - 150;
+            score = 0;
+            gameRunning = true;
+            gameLoop();
+        }
+
+        // Create obstacles based on the level data
         function createObstacles() {
             obstacles = [];
             for (let y = 0; y < levelData.length; y++) {
@@ -135,7 +170,7 @@
                     alert("You won the game! Score: " + score);
                     gameRunning = false;
                 } else {
-                    levelData = levels[currentLevel];
+                    levelData = levels[currentLevel].data;
                     createObstacles();
                     player.x = 50;
                     player.y = canvas.height - 150;
@@ -203,9 +238,19 @@
             }
         });
 
-        // Start game
-        createObstacles();
-        gameLoop();
+        // When a level is selected, start the game
+        levelSelect.addEventListener("change", () => {
+            if (levelSelect.value) {
+                startGame(parseInt(levelSelect.value));
+            }
+        });
+
+        // Load all levels from ./levels folder and populate the menu
+        let levels = [];
+        loadLevels().then(loadedLevels => {
+            levels = loadedLevels;
+        });
+
     </script>
 </body>
 </html>
