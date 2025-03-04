@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fialový DeepSeek</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Daisy UI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.css" rel="stylesheet" type="text/css" />
+    <!-- Vlastní styl pro fialový design -->
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #6D28D9, #8B5CF6);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex items-center justify-center">
+    <div class="max-w-4xl w-full bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8">
+        <!-- Hlavička -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-white">Fialový DeepSeek</h1>
+            <p class="text-purple-200 mt-2">Vyzkoušejte naši AI integraci ve fialovém designu.</p>
+        </header>
+
+        <!-- Vstupní pole a tlačítko -->
+        <div class="flex flex-col space-y-4">
+            <input
+                type="text"
+                id="inputText"
+                placeholder="Zadejte svůj dotaz..."
+                class="input input-bordered w-full bg-white/20 text-white placeholder-purple-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+            <button
+                onclick="sendRequest()"
+                class="btn btn-primary w-full bg-purple-600 border-purple-600 hover:bg-purple-700 hover:border-purple-700 text-white"
+            >
+                Odeslat
+            </button>
+        </div>
+
+        <!-- Výstupní oblast -->
+        <div class="mt-8">
+            <h2 class="text-xl font-semibold text-white">Odpověď:</h2>
+            <div id="responseText" class="mt-4 p-4 bg-white/10 rounded-lg text-purple-100"></div>
+        </div>
+    </div>
+
+    <script>
+        // Zakódovaný API klíč v Base64
+        const encodedKey = 'c2stZWNlZjA2ZmY2ZTM4NDFkZmFjMjk4OGM2Zjc5MjNiMjE=';
+
+        // Dekódování klíče
+        const apiKey = atob(encodedKey);
+
+        async function sendRequest() {
+            const inputText = document.getElementById('inputText').value;
+            const apiUrl = 'https://api.deepseek.com/v1/endpoint'; // Nahraďte skutečným URL API
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        text: inputText
+                    })
+                });
+
+                const data = await response.json();
+                document.getElementById('responseText').innerText = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error('Chyba:', error);
+                document.getElementById('responseText').innerText = 'Došlo k chybě při komunikaci s API.';
+            }
+        }
+    </script>
+</body>
+</html>
